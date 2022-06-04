@@ -10,8 +10,8 @@ public class Validator {
             return "[ERROR] Given nickname is too long!";
         }
 
-        if (!nickname.matches("[a-zA-Z0-9]*")) {
-            return "[ERROR] The nickname can only contain letters and numbers!";
+        if (!nickname.matches("[a-zA-Z0-9 _-]*")) {
+            return "[ERROR] The nickname can only contain letters, numbers and simple characters like '-' '_'!";
         }
 
         return "";
