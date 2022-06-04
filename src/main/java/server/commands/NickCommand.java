@@ -2,6 +2,7 @@ package server.commands;
 
 import server.ConnectionHandler;
 import server.Server;
+import server.Validator;
 
 public class NickCommand extends Command {
     public NickCommand(Server serverHandler, Access access) {
@@ -10,9 +11,12 @@ public class NickCommand extends Command {
 
     @Override
     public String customBehaviour(ConnectionHandler client, String[] args) {
-        var nickname = String.join(" ", args);
+        String nickname = String.join(" ", args);
+        String message = Validator.validateNickname(nickname);
 
-        //TODO: validateNickname
+        if (!message.isEmpty()) {
+            return message;
+        }
 
         serverHandler.broadcastExcept(client.getNickname() + " renamed themselves to " + nickname, client);
 

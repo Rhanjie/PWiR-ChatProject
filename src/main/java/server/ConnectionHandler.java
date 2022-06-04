@@ -32,7 +32,12 @@ public class ConnectionHandler implements Runnable {
                 sendMessage("Please enter a nickname: ");
                 nickname = input.readLine();
 
-                isNicknameValid = validateNickname();
+                String message = Validator.validateNickname(nickname);
+                isNicknameValid = message.isEmpty();
+
+                if (!message.isEmpty()) {
+                    sendMessage(message);
+                }
             }
 
             server.broadcast(nickname + " joined to the server");
@@ -91,28 +96,5 @@ public class ConnectionHandler implements Runnable {
 
     public String getNickname() {
         return nickname;
-    }
-
-    //TODO: Move to validator class
-    private boolean validateNickname() {
-        if (nickname == null || nickname.isEmpty()) {
-            sendMessage("[ERROR] You did not enter a nickname!");
-
-            return false;
-        }
-
-        if (nickname.length() > 10) {
-            sendMessage("[ERROR] Given nickname is too long!");
-
-            return false;
-        }
-
-        if (!nickname.matches("[a-zA-Z0-9]*")) {
-            sendMessage("[ERROR] The nickname can only contain letters and numbers!");
-
-            return false;
-        }
-
-        return true;
     }
 }
