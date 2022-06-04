@@ -25,7 +25,7 @@ public class CreateChannelCommand extends Command {
         }
 
         Channel channel = new Channel(channelName, password, client);
-        if (serverHandler.registerChannel(channel)) {
+        if (!serverHandler.registerChannel(channel)) {
             return "Problem with creating the channel!";
         }
 

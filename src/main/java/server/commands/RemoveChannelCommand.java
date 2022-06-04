@@ -23,9 +23,11 @@ public class RemoveChannelCommand extends Command {
             return "Channel with that name is not exist!";
         }
 
-        //TODO: Check permissions
+        serverHandler.broadcastExceptSender(client,"Current channel has been deleted. Switched to waiting room");
 
+        channel.closeChannel();
         serverHandler.unregisterChannel(channel);
+        client.setChannel(null);
 
         return "Successfully removed the channel!";
     }

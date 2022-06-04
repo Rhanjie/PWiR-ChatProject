@@ -21,6 +21,12 @@ public class Channel {
         owner.setChannel(this);
     }
 
+    public void closeChannel() {
+        for (ConnectionHandler user : users) {
+            user.setChannel(null);
+        }
+    }
+
     public String attemptToJoin(ConnectionHandler client, String givenPassword) {
         if (!password.equals(givenPassword)) {
             return "Given password is wrong!";

@@ -151,5 +151,9 @@ public class Server implements Runnable {
         //join to channel (member)
         //kick from the channel (admin)
         //ban ip (admin)
+        //help
+        //list of current channels
+        //list of current users in channel
+        //list of all users in the server
     }
 }

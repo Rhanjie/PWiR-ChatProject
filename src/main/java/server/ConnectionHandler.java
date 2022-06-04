@@ -41,7 +41,10 @@ public class ConnectionHandler implements Runnable {
                 }
             }
 
-            server.broadcast(this, nickname + " joined to the server");
+            sendMessage("Successfully joined to the server!\n" +
+                    "You are currently in the waiting room. To select a room, type /join <name>");
+
+            //TODO: Display list of current opened channels
 
             String message;
             while ((message = input.readLine()) != null) {
