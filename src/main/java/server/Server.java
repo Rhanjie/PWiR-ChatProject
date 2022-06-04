@@ -8,6 +8,8 @@ import server.commands.QuitCommand;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -22,6 +24,8 @@ public class Server implements Runnable {
 
     private int port;
     private boolean done;
+
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     public Server() {
         this.connections = new ArrayList<>();
@@ -59,21 +63,25 @@ public class Server implements Runnable {
     }
 
     public void broadcast(String message) {
+        String currentTime = formatter.format(LocalTime.now());
+
         System.out.println(message);
 
         for (var connection : connections) {
             if (connection != null) {
-                connection.sendMessage(message);
+                connection.sendMessage("[" + currentTime + "] " + message);
             }
         }
     }
 
     public void broadcastExcept(String message, ConnectionHandler except) {
+        String currentTime = formatter.format(LocalTime.now());
+
         System.out.println(message);
 
         for (var connection : connections) {
             if (connection != null && connection != except) {
-                connection.sendMessage(message);
+                connection.sendMessage("[" + currentTime + "] " + message);
             }
         }
     }

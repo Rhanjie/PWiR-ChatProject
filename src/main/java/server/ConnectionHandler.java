@@ -65,7 +65,7 @@ public class ConnectionHandler implements Runnable {
                     }
                 }
 
-                else server.broadcast("[" + nickname + "]: " + message);
+                else server.broadcast(nickname + ": " + message);
             }
         }
 

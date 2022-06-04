@@ -6,7 +6,7 @@ public class Validator {
             return "[ERROR] You did not enter a nickname!";
         }
 
-        if (nickname.length() > 10) {
+        if (nickname.length() > 20) {
             return "[ERROR] Given nickname is too long!";
         }
 
