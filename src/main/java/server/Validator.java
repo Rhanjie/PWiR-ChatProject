@@ -16,4 +16,20 @@ public class Validator {
 
         return "";
     }
+
+    public static String validateChannelName(String channelName) {
+        if (channelName == null || channelName.isEmpty()) {
+            return "[ERROR] You did not enter a channel name!";
+        }
+
+        if (channelName.length() > 20) {
+            return "[ERROR] Given channel name is too long!";
+        }
+
+        if (!channelName.matches("[a-zA-Z0-9 _-]*")) {
+            return "[ERROR] The nickname can only contain letters, numbers and simple characters like '-' '_'!";
+        }
+
+        return "";
+    }
 }

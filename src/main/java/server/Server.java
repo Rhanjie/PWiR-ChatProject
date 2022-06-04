@@ -29,6 +29,7 @@ public class Server implements Runnable {
 
     public Server() {
         this.connections = new ArrayList<>();
+        this.channels = new ArrayList<>();
 
         Random random = new Random();
         port = random.nextInt(10000) + 10000;
@@ -93,6 +94,31 @@ public class Server implements Runnable {
 
         return false;
     }
+
+    public boolean registerChannel(Channel newChannel) {
+        for (Channel channel : channels) {
+            if (channel.equals(newChannel)) {
+                return false;
+            }
+        }
+
+        channels.add(newChannel);
+
+        return true;
+    }
+
+    public boolean unregisterChannel(Channel newChannel) {
+        for (Channel channel : channels) {
+            if (channel.equals(newChannel)) {
+                channels.remove(channel);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     private void shutdown() {
         try {
