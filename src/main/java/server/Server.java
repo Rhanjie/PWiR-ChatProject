@@ -3,6 +3,7 @@ package server;
 import server.commands.Command;
 import server.commands.ICommand;
 import server.commands.NickCommand;
+import server.commands.QuitCommand;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -108,5 +109,6 @@ public class Server implements Runnable {
         registeredCommands = new HashMap<>();
 
         registeredCommands.put("nick", new NickCommand(this, Command.Access.MEMBER));
+        registeredCommands.put("quit", new QuitCommand(this, Command.Access.MEMBER));
     }
 }

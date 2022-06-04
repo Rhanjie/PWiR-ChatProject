@@ -60,8 +60,9 @@ public class ConnectionHandler implements Runnable {
                     }
 
                     String output = command.execute(this, args);
-
-                    sendMessage(output);
+                    if (!output.isEmpty()) {
+                        sendMessage(output);
+                    }
                 }
 
                 else server.broadcast("[" + nickname + "]: " + message);

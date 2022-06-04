@@ -18,8 +18,13 @@ public class InputHandler implements Runnable {
 
             while (!client.isDone()) {
                 String message = input.readLine();
-
                 client.sendMessage(message);
+
+                if (message.equals("/quit")) {
+                    input.close();
+
+                    client.shutdown();
+                }
             }
         }
 

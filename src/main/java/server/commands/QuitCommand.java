@@ -10,6 +10,10 @@ public class QuitCommand extends Command {
 
     @Override
     public String customBehaviour(ConnectionHandler client, String[] args) {
-        return "TODO: Not implemented yet";
+        client.shutdown();
+
+        serverHandler.broadcast("User " + client.getNickname() + " left the server!");
+
+        return "";
     }
 }
