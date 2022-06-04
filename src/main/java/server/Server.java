@@ -19,13 +19,13 @@ import java.util.concurrent.Executors;
 public class Server implements Runnable {
     private ServerSocket server;
     private ArrayList<ConnectionHandler> connections;
+    private ArrayList<Channel> channels;
+
     private HashMap<String, ICommand> registeredCommands;
     private ExecutorService threadPool;
 
     private int port;
     private boolean done;
-
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     public Server() {
         this.connections = new ArrayList<>();
@@ -62,30 +62,6 @@ public class Server implements Runnable {
         }
     }
 
-    public void broadcast(String message) {
-        String currentTime = formatter.format(LocalTime.now());
-
-        System.out.println(message);
-
-        for (var connection : connections) {
-            if (connection != null) {
-                connection.sendMessage("[" + currentTime + "] " + message);
-            }
-        }
-    }
-
-    public void broadcastExcept(String message, ConnectionHandler except) {
-        String currentTime = formatter.format(LocalTime.now());
-
-        System.out.println(message);
-
-        for (var connection : connections) {
-            if (connection != null && connection != except) {
-                connection.sendMessage("[" + currentTime + "] " + message);
-            }
-        }
-    }
-
     public ICommand getCommand(String command) {
         command = command.replace("/", "");
 
@@ -94,6 +70,28 @@ public class Server implements Runnable {
         }
 
         return registeredCommands.get(command);
+    }
+
+    public boolean broadcast(ConnectionHandler sender, String message) {
+        var channel = sender.getChannel();
+        if (channel != null) {
+            channel.broadcast(message);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean broadcastExceptSender(ConnectionHandler sender, String message) {
+        var channel = sender.getChannel();
+        if (channel != null) {
+            channel.broadcastExcept(message, sender);
+
+            return true;
+        }
+
+        return false;
     }
 
     private void shutdown() {

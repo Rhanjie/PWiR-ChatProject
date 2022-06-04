@@ -18,7 +18,8 @@ public class NickCommand extends Command {
             return message;
         }
 
-        serverHandler.broadcastExcept(client.getNickname() + " renamed themselves to " + nickname, client);
+        message = client.getNickname() + " renamed themselves to " + nickname;
+        serverHandler.broadcastExceptSender(client, message);
 
         client.setNickname(nickname);
 
