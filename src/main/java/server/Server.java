@@ -15,13 +15,16 @@ public class Server implements Runnable {
     private ExecutorService threadPool;
 
     private int port = 25565;
-    private boolean isDone = false;
+    private boolean done = false;
 
     public Server() {
         this.connections = new ArrayList<>();
 
         Random random = new Random();
         port = random.nextInt(10000) + 10000;
+
+        //TODO: Only for tests
+        port = 25565;
     }
 
     @Override
@@ -32,7 +35,7 @@ public class Server implements Runnable {
 
             System.out.println("Server is started at the port " + port);
 
-            while (!isDone) {
+            while (!done) {
                 Socket client = server.accept();
                 ConnectionHandler handler = new ConnectionHandler(this, client);
 
@@ -41,7 +44,7 @@ public class Server implements Runnable {
             }
         }
 
-        catch (IOException e) {
+        catch (IOException exception) {
             shutdown();
         }
     }
@@ -56,7 +59,7 @@ public class Server implements Runnable {
 
     private void shutdown() {
         try {
-            isDone = true;
+            done = true;
 
             if (!server.isClosed()) {
                 server.close();

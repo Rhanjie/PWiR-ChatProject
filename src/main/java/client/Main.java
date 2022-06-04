@@ -2,6 +2,9 @@ package client;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Client TODO");
+        Client client = new Client();
+        Thread thread = new Thread(client);
+
+        thread.start();
     }
 }
