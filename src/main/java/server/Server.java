@@ -1,9 +1,6 @@
 package server;
 
-import server.commands.Command;
-import server.commands.ICommand;
-import server.commands.NickCommand;
-import server.commands.QuitCommand;
+import server.commands.*;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -19,8 +16,8 @@ import java.util.concurrent.Executors;
 public class Server implements Runnable {
     private ServerSocket server;
     private ArrayList<ConnectionHandler> connections;
-    private ArrayList<Channel> channels;
 
+    private HashMap<String, Channel> channels;
     private HashMap<String, ICommand> registeredCommands;
     private ExecutorService threadPool;
 
@@ -29,7 +26,7 @@ public class Server implements Runnable {
 
     public Server() {
         this.connections = new ArrayList<>();
-        this.channels = new ArrayList<>();
+        this.channels = new HashMap<>();
 
         Random random = new Random();
         port = random.nextInt(10000) + 10000;
@@ -96,27 +93,31 @@ public class Server implements Runnable {
     }
 
     public boolean registerChannel(Channel newChannel) {
-        for (Channel channel : channels) {
-            if (channel.equals(newChannel)) {
-                return false;
-            }
+        if (channels.containsKey(newChannel.getChannelName())) {
+            return false;
         }
 
-        channels.add(newChannel);
+        channels.put(newChannel.getChannelName(), newChannel);
 
         return true;
     }
 
-    public boolean unregisterChannel(Channel newChannel) {
-        for (Channel channel : channels) {
-            if (channel.equals(newChannel)) {
-                channels.remove(channel);
-
-                return true;
-            }
+    public Channel getChannelFromName(String name) {
+        if (!channels.containsKey(name)) {
+            return null;
         }
 
-        return false;
+        return channels.get(name);
+    }
+
+    public boolean unregisterChannel(Channel newChannel) {
+        if (!channels.containsKey(newChannel.getChannelName())) {
+            return false;
+        }
+
+        channels.remove(newChannel.getChannelName());
+
+        return true;
     }
 
 
@@ -142,5 +143,13 @@ public class Server implements Runnable {
 
         registeredCommands.put("nick", new NickCommand(this, Command.Access.MEMBER));
         registeredCommands.put("quit", new QuitCommand(this, Command.Access.MEMBER));
+
+        registeredCommands.put("create_channel", new CreateChannelCommand(this, Command.Access.MEMBER));
+        registeredCommands.put("remove_channel", new RemoveChannelCommand(this, Command.Access.ADMIN));
+
+        //TODO: Missing commands
+        //join to channel (member)
+        //kick from the channel (admin)
+        //ban ip (admin)
     }
 }

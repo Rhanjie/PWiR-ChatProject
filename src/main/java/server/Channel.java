@@ -74,4 +74,9 @@ public class Channel {
             }
         }
     }
+
+    public String getChannelName() {
+        return channelName;
+    }
+
 }
