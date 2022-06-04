@@ -12,7 +12,7 @@ public class QuitCommand extends Command {
     public String customBehaviour(ConnectionHandler client, String[] args) {
         client.shutdown();
 
-        serverHandler.broadcast("User " + client.getNickname() + " left the server!");
+        serverHandler.broadcast(client.getNickname() + " left the server!");
 
         return "";
     }

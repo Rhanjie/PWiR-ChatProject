@@ -31,6 +31,8 @@ public class Client implements Runnable {
         }
 
         catch (IOException exception) {
+            System.out.println("Cannot connect to the server!");
+
             shutdown();
         }
     }
@@ -43,10 +45,15 @@ public class Client implements Runnable {
         try {
             done = true;
 
-            input.close();
-            output.close();
+            if (input != null) {
+                input.close();
+            }
 
-            if (!client.isClosed()) {
+            if (output != null) {
+                output.close();
+            }
+
+            if (client != null && !client.isClosed()) {
                 client.close();
             }
         }
