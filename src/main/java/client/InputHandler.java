@@ -19,8 +19,6 @@ public class InputHandler implements Runnable {
             while (!client.isDone()) {
                 String message = input.readLine();
 
-                //TODO: Serve the commands
-
                 client.sendMessage(message);
             }
         }
