@@ -41,10 +41,14 @@ public class ConnectionHandler implements Runnable {
                 }
             }
 
-            sendMessage("Successfully joined to the server!\n" +
-                    "You are currently in the waiting room. To select a room, type /join <name>");
+            sendMessage("""
+                    Successfully joined to the server!
+                    
+                    You are currently in the waiting room. To select a room, type /join <name>
+                    To display available commands, type /help
+                    """);
 
-            //TODO: Display list of current opened channels
+            sendMessage(server.printChannelList());
 
             String message;
             while ((message = input.readLine()) != null) {

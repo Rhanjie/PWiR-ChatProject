@@ -48,6 +48,10 @@ public class Channel {
                 users.remove(user);
                 client.setChannel(null);
 
+                if (users.size() == 0) {
+                    //remove channel if empty
+                }
+
                 broadcast(client.getNickname() + " left the channel");
 
                 return "You have successfully left the channel!";

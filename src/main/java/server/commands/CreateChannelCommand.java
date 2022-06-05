@@ -6,8 +6,8 @@ import server.Server;
 import server.Validator;
 
 public class CreateChannelCommand extends Command {
-    public CreateChannelCommand(Server serverHandler) {
-        super(serverHandler);
+    public CreateChannelCommand(Server serverHandler, String helpInfo) {
+        super(serverHandler, helpInfo);
     }
 
     @Override

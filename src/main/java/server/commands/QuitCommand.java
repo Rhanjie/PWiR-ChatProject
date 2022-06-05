@@ -5,8 +5,8 @@ import server.ConnectionHandler;
 import server.Server;
 
 public class QuitCommand extends Command {
-    public QuitCommand(Server serverHandler) {
-        super(serverHandler);
+    public QuitCommand(Server serverHandler, String helpInfo) {
+        super(serverHandler, helpInfo);
     }
 
     @Override

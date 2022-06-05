@@ -117,6 +117,18 @@ public class Server implements Runnable {
         return builder.toString();
     }
 
+    public String printCommands() {
+        StringBuilder builder = new StringBuilder("List of commands:\n");
+
+        for (var command : registeredCommands.entrySet()) {
+            String line = "/" + command.getKey() + " - " + ((Command) command.getValue()).getHelpInfo() + "\n";
+
+            builder.append(line);
+        }
+
+        return builder.toString();
+    }
+
     public void unregisterChannel(Channel newChannel) {
         if (!channels.containsKey(newChannel.getChannelName())) {
             return;
@@ -144,18 +156,18 @@ public class Server implements Runnable {
     }
 
     private void registerCommands() {
-        registeredCommands.put("help", new HelpCommand(this));
-        registeredCommands.put("nick", new NickCommand(this));
-        registeredCommands.put("quit", new QuitCommand(this));
+        registeredCommands.put("help", new HelpCommand(this, "Display list of commands"));
+        registeredCommands.put("nick", new NickCommand(this, "Change nick"));
+        registeredCommands.put("quit", new QuitCommand(this, "Quit the server"));
 
-        registeredCommands.put("create_channel", new CreateChannelCommand(this));
-        registeredCommands.put("remove_channel", new RemoveChannelCommand(this));
+        registeredCommands.put("create_channel", new CreateChannelCommand(this, "Create new channel with given name and optionally password"));
+        registeredCommands.put("remove_channel", new RemoveChannelCommand(this, "Remove channel with given name (owner command)"));
 
-        registeredCommands.put("join", new JoinCommand(this));
-        registeredCommands.put("leave", new LeaveCommand(this));
-        registeredCommands.put("kick", new KickCommand(this));
+        registeredCommands.put("join", new JoinCommand(this, "Join to the channel with given name"));
+        registeredCommands.put("leave", new LeaveCommand(this, "Leave the channel and back to the waiting room"));
+        registeredCommands.put("kick", new KickCommand(this, "Kick the user from the channel (owner command)"));
 
-        registeredCommands.put("channels", new ChannelListCommand(this));
-        registeredCommands.put("users", new UserListCommand(this));
+        registeredCommands.put("channels", new ChannelListCommand(this, "Display the all current available channels"));
+        registeredCommands.put("users", new UserListCommand(this, "Display the users in the current room you are in"));
     }
 }

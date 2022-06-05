@@ -4,17 +4,12 @@ import server.ConnectionHandler;
 import server.Server;
 
 public class HelpCommand extends Command {
-    public HelpCommand(Server serverHandler) {
-        super(serverHandler);
+    public HelpCommand(Server serverHandler, String helpInfo) {
+        super(serverHandler, helpInfo);
     }
 
     @Override
     public String customBehaviour(ConnectionHandler client, String[] args) {
-        var channel = client.getChannel();
-        if (channel == null) {
-            return "You are not in channel!";
-        }
-
-        return channel.printUserList();
+        return serverHandler.printCommands();
     }
 }

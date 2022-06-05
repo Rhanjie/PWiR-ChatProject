@@ -5,8 +5,8 @@ import server.Server;
 import server.Validator;
 
 public class NickCommand extends Command {
-    public NickCommand(Server serverHandler) {
-        super(serverHandler);
+    public NickCommand(Server serverHandler, String helpInfo) {
+        super(serverHandler, helpInfo);
     }
 
     @Override

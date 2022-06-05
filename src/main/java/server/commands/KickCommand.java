@@ -4,8 +4,8 @@ import server.ConnectionHandler;
 import server.Server;
 
 public class KickCommand extends Command {
-    public KickCommand(Server serverHandler) {
-        super(serverHandler);
+    public KickCommand(Server serverHandler, String helpInfo) {
+        super(serverHandler, helpInfo);
     }
 
     @Override

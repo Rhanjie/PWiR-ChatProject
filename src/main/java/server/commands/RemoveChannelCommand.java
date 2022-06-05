@@ -5,8 +5,8 @@ import server.ConnectionHandler;
 import server.Server;
 
 public class RemoveChannelCommand extends Command {
-    public RemoveChannelCommand(Server serverHandler) {
-        super(serverHandler);
+    public RemoveChannelCommand(Server serverHandler, String helpInfo) {
+        super(serverHandler, helpInfo);
     }
 
     @Override

@@ -4,8 +4,8 @@ import server.ConnectionHandler;
 import server.Server;
 
 public class UserListCommand extends Command {
-    public UserListCommand(Server serverHandler) {
-        super(serverHandler);
+    public UserListCommand(Server serverHandler, String helpInfo) {
+        super(serverHandler, helpInfo);
     }
 
     @Override
