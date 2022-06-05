@@ -141,14 +141,14 @@ public class Server implements Runnable {
     private void registerCommands() {
         registeredCommands = new HashMap<>();
 
-        registeredCommands.put("nick", new NickCommand(this, Command.Access.MEMBER));
-        registeredCommands.put("quit", new QuitCommand(this, Command.Access.MEMBER));
+        registeredCommands.put("nick", new NickCommand(this));
+        registeredCommands.put("quit", new QuitCommand(this));
 
-        registeredCommands.put("create_channel", new CreateChannelCommand(this, Command.Access.MEMBER));
-        registeredCommands.put("remove_channel", new RemoveChannelCommand(this, Command.Access.ADMIN));
+        registeredCommands.put("create_channel", new CreateChannelCommand(this));
+        registeredCommands.put("remove_channel", new RemoveChannelCommand(this));
 
-        registeredCommands.put("join", new JoinCommand(this, Command.Access.MEMBER)); //not tested yet
-        registeredCommands.put("leave", new LeaveCommand(this, Command.Access.MEMBER)); //not tested yet
+        registeredCommands.put("join", new JoinCommand(this)); //not tested yet
+        registeredCommands.put("leave", new LeaveCommand(this)); //not tested yet
 
         //TODO: Missing commands
         //kick from the channel (admin)
