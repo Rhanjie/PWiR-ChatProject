@@ -24,6 +24,15 @@ public class JoinCommand extends Command {
             return "Channel with that name is not exist!";
         }
 
+        var currentChannel = client.getChannel();
+        if (currentChannel != null) {
+            if (currentChannel == channel) {
+                return "You are already on this channel!";
+            }
+
+            currentChannel.attemptToLeave(client);
+        }
+
         return channel.attemptToJoin(client, password);
     }
 }

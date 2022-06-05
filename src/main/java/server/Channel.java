@@ -34,10 +34,12 @@ public class Channel {
             }
         }
 
+        broadcast(client.getNickname() + " joined the channel");
+
         users.add(client);
         client.setChannel(this);
 
-        return "You have successfully joined to the channel #" + channelName;
+        return "You have successfully joined the channel #" + channelName;
     }
 
     public String attemptToLeave(ConnectionHandler client) {
@@ -45,6 +47,8 @@ public class Channel {
             if (user.equals(client)) {
                 users.remove(user);
                 client.setChannel(null);
+
+                broadcast(client.getNickname() + " left the channel");
 
                 return "You have successfully left the channel!";
             }
