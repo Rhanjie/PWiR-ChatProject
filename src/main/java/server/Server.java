@@ -137,6 +137,15 @@ public class Server implements Runnable {
         channels.remove(newChannel.getChannelName());
     }
 
+    public ConnectionHandler getConnectionFromNickname(String nickname) {
+        for (var connection : connections) {
+            if (connection.getNickname() != null && connection.getNickname().equalsIgnoreCase(nickname)) {
+                return connection;
+            }
+        }
+
+        return null;
+    }
 
     private void shutdown() {
         try {

@@ -28,18 +28,22 @@ public class ConnectionHandler implements Runnable {
             input = new BufferedReader(new InputStreamReader(client.getInputStream()));
             output = new PrintWriter(client.getOutputStream(), true);
 
+            String givenNickname = "";
+
             boolean isNicknameValid = false;
             while (!isNicknameValid) {
                 sendMessage("Please enter a nickname: ");
-                nickname = input.readLine();
+                givenNickname = input.readLine();
 
-                String message = Validator.validateNickname(nickname);
+                String message = Validator.validateNickname(givenNickname, server);
                 isNicknameValid = message.isEmpty();
 
                 if (!message.isEmpty()) {
                     sendMessage(message);
                 }
             }
+
+            nickname = givenNickname;
 
             sendMessage("""
                     Successfully joined to the server!
