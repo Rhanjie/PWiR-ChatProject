@@ -12,11 +12,16 @@ public class Client implements Runnable {
     private PrintWriter output;
 
     private boolean done = false;
+    private final String IP;
+
+    Client(String IP) {
+        this.IP = IP;
+    }
 
     @Override
     public void run() {
         try {
-            client = new Socket("127.0.0.1", 20000);
+            client = new Socket(IP, 20000);
             input = new BufferedReader(new InputStreamReader(client.getInputStream()));
             output = new PrintWriter(client.getOutputStream(), true);
 
