@@ -23,16 +23,6 @@ public class Channel {
         owner = client;
     }
 
-    public void closeChannel(ConnectionHandler client) throws IllegalAccessException {
-        if (!isChannelOwner(client)) {
-            throw new IllegalAccessException("You have not permission to execute this command!");
-        }
-
-        for (ConnectionHandler user : users) {
-            user.setChannel(null);
-        }
-    }
-
     public String attemptToJoin(ConnectionHandler client, String givenPassword) {
         if (!password.equals(givenPassword)) {
             return "Given password is wrong!";
@@ -61,6 +51,35 @@ public class Channel {
         }
 
         return "You are not on this channel!";
+    }
+
+    public void closeChannel(ConnectionHandler client) throws IllegalAccessException {
+        if (!isChannelOwner(client)) {
+            throw new IllegalAccessException("You do not have permission to execute this command!");
+        }
+
+        for (ConnectionHandler user : users) {
+            user.setChannel(null);
+        }
+    }
+
+    public String kickUser(ConnectionHandler client, String nickname) throws IllegalAccessException {
+        if (!isChannelOwner(client)) {
+            throw new IllegalAccessException("You do not have permission to execute this command!");
+        }
+
+        for (ConnectionHandler user : users) {
+            if (user.getNickname().equals(nickname)) {
+                users.remove(user);
+
+                user.setChannel(null);
+                user.sendMessage("You have been kicked from the channel by owner!");
+
+                return "";
+            }
+        }
+
+        return "User " + nickname + " is not in this channel!";
     }
 
     public boolean isChannelOwner(ConnectionHandler client) {

@@ -24,7 +24,7 @@ public class RemoveChannelCommand extends Command {
         }
 
         if (!channel.isChannelOwner(client)) {
-            return "You have not permission to execute this command!";
+            return "You do not have permission to execute this command!";
         }
 
         serverHandler.broadcastExceptSender(client,"Current channel has been deleted. Switched to waiting room");

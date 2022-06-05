@@ -147,11 +147,11 @@ public class Server implements Runnable {
         registeredCommands.put("create_channel", new CreateChannelCommand(this));
         registeredCommands.put("remove_channel", new RemoveChannelCommand(this));
 
-        registeredCommands.put("join", new JoinCommand(this)); //not tested yet
-        registeredCommands.put("leave", new LeaveCommand(this)); //not tested yet
+        registeredCommands.put("join", new JoinCommand(this));
+        registeredCommands.put("leave", new LeaveCommand(this));
+        registeredCommands.put("kick", new KickCommand(this));
 
         //TODO: Missing commands
-        //kick from the channel (admin)
         //ban ip (admin)
         //help
         //list of current channels
