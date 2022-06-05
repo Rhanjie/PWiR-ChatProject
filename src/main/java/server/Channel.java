@@ -42,17 +42,23 @@ public class Channel {
         return "You have successfully joined the channel #" + channelName;
     }
 
-    public String attemptToLeave(ConnectionHandler client) {
+    public String attemptToLeave(ConnectionHandler client, Server serverHandler) {
         for (ConnectionHandler user : users) {
             if (user.equals(client)) {
                 users.remove(user);
                 client.setChannel(null);
 
+                //Remove channel if empty
                 if (users.size() == 0) {
-                    //remove channel if empty
+                    try { closeChannel(owner); }
+                    catch (IllegalAccessException exception) {
+                        exception.printStackTrace();
+                    }
+
+                    serverHandler.unregisterChannel(this);
                 }
 
-                broadcast(client.getNickname() + " left the channel");
+                else broadcast(client.getNickname() + " left the channel");
 
                 return "You have successfully left the channel!";
             }

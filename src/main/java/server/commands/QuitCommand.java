@@ -13,7 +13,7 @@ public class QuitCommand extends Command {
     public String customBehaviour(ConnectionHandler client, String[] args) {
         var channel = client.getChannel();
         if (channel != null) {
-            channel.attemptToLeave(client);
+            channel.attemptToLeave(client, serverHandler);
         }
         
         client.shutdown();

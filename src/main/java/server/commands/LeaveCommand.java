@@ -16,6 +16,6 @@ public class LeaveCommand extends Command {
             return "You are not in channel!";
         }
         
-        return channel.attemptToLeave(client);
+        return channel.attemptToLeave(client, serverHandler);
     }
 }

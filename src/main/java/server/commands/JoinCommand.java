@@ -30,7 +30,7 @@ public class JoinCommand extends Command {
                 return "You are already on this channel!";
             }
 
-            currentChannel.attemptToLeave(client);
+            currentChannel.attemptToLeave(client, serverHandler);
         }
 
         return channel.attemptToJoin(client, password);
