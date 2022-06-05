@@ -6,8 +6,8 @@ import server.Server;
 import server.Validator;
 
 public class RemoveChannelCommand extends Command {
-    public RemoveChannelCommand(Server serverHandler, Access access) {
-        super(serverHandler, access);
+    public RemoveChannelCommand(Server serverHandler) {
+        super(serverHandler);
     }
 
     @Override
@@ -23,9 +23,17 @@ public class RemoveChannelCommand extends Command {
             return "Channel with that name is not exist!";
         }
 
+        if (!channel.isChannelOwner(client)) {
+            return "You have not permission to execute this command!";
+        }
+
         serverHandler.broadcastExceptSender(client,"Current channel has been deleted. Switched to waiting room");
 
-        channel.closeChannel();
+        try { channel.closeChannel(client); }
+        catch (IllegalAccessException exception) {
+            exception.printStackTrace();
+        }
+
         serverHandler.unregisterChannel(channel);
         client.setChannel(null);
 

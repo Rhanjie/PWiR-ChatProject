@@ -5,8 +5,8 @@ import server.ConnectionHandler;
 import server.Server;
 
 public class LeaveCommand extends Command {
-    public LeaveCommand(Server serverHandler, Access access) {
-        super(serverHandler, access);
+    public LeaveCommand(Server serverHandler) {
+        super(serverHandler);
     }
 
     @Override

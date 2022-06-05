@@ -5,23 +5,29 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Channel {
-    private String channelName;
-    private String password;
+    private final String channelName;
+    private final String password;
 
+    private final ConnectionHandler owner;
     private final ArrayList<ConnectionHandler> users;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-    public Channel(String channelName, String password, ConnectionHandler owner) {
+    public Channel(String channelName, String password, ConnectionHandler client) {
         this.channelName = channelName;
         this.password = password;
 
         users = new ArrayList<>();
-        users.add(owner);
+        users.add(client);
 
-        owner.setChannel(this);
+        client.setChannel(this);
+        owner = client;
     }
 
-    public void closeChannel() {
+    public void closeChannel(ConnectionHandler client) throws IllegalAccessException {
+        if (!isChannelOwner(client)) {
+            throw new IllegalAccessException("You have not permission to execute this command!");
+        }
+
         for (ConnectionHandler user : users) {
             user.setChannel(null);
         }
@@ -57,6 +63,10 @@ public class Channel {
         return "You are not on this channel!";
     }
 
+    public boolean isChannelOwner(ConnectionHandler client) {
+        return client == owner;
+    }
+
     public void broadcast(String message) {
         String currentTime = formatter.format(LocalTime.now());
 
@@ -84,5 +94,4 @@ public class Channel {
     public String getChannelName() {
         return channelName;
     }
-
 }

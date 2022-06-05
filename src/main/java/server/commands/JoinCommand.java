@@ -6,8 +6,8 @@ import server.Server;
 import server.Validator;
 
 public class JoinCommand extends Command {
-    public JoinCommand(Server serverHandler, Access access) {
-        super(serverHandler, access);
+    public JoinCommand(Server serverHandler) {
+        super(serverHandler);
     }
 
     @Override
