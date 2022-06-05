@@ -147,8 +147,10 @@ public class Server implements Runnable {
         registeredCommands.put("create_channel", new CreateChannelCommand(this, Command.Access.MEMBER));
         registeredCommands.put("remove_channel", new RemoveChannelCommand(this, Command.Access.ADMIN));
 
+        registeredCommands.put("join", new JoinCommand(this, Command.Access.MEMBER)); //not tested yet
+        registeredCommands.put("leave", new LeaveCommand(this, Command.Access.MEMBER)); //not tested yet
+
         //TODO: Missing commands
-        //join to channel (member)
         //kick from the channel (admin)
         //ban ip (admin)
         //help

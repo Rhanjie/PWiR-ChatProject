@@ -44,7 +44,7 @@ public class Channel {
         return "You have successfully joined to the channel #" + channelName;
     }
 
-    public String attemptToDisconnect(ConnectionHandler client) {
+    public String attemptToLeave(ConnectionHandler client) {
         for (ConnectionHandler user : users) {
             if (user.equals(client)) {
                 users.remove(user);
