@@ -110,6 +110,22 @@ public class Channel {
         }
     }
 
+    public String printUserList() {
+        StringBuilder builder = new StringBuilder("Number of users in this channel: " + getNumberOfUsers() + "\n[ ");
+
+        if (!users.isEmpty()) {
+            for (var user : users) {
+                String line = "'" + user.getNickname() + "' ";
+
+                builder.append(line);
+            }
+        }
+
+        builder.append("]");
+
+        return builder.toString();
+    }
+
     public String getChannelName() {
         return channelName;
     }

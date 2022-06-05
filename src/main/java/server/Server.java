@@ -169,7 +169,6 @@ public class Server implements Runnable {
         registeredCommands.put("kick", new KickCommand(this));
 
         registeredCommands.put("channels", new ChannelListCommand(this));
-        //registeredCommands.put("user", new UserListCommand(this));
-        //registeredCommands.put("total_users", new TotalUserListCommand(this));
+        registeredCommands.put("users", new UserListCommand(this));
     }
 }
