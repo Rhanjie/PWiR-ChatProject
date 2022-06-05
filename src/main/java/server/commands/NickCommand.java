@@ -5,8 +5,8 @@ import server.Server;
 import server.Validator;
 
 public class NickCommand extends Command {
-    public NickCommand(Server serverHandler, Access access) {
-        super(serverHandler, access);
+    public NickCommand(Server serverHandler) {
+        super(serverHandler);
     }
 
     @Override
@@ -18,7 +18,8 @@ public class NickCommand extends Command {
             return message;
         }
 
-        serverHandler.broadcastExcept(client.getNickname() + " renamed themselves to " + nickname, client);
+        message = client.getNickname() + " renamed themselves to " + nickname;
+        serverHandler.broadcastExceptSender(client, message);
 
         client.setNickname(nickname);
 

@@ -4,22 +4,18 @@ import server.Channel;
 import server.ConnectionHandler;
 import server.Server;
 
-public class QuitCommand extends Command {
-    public QuitCommand(Server serverHandler) {
+public class LeaveCommand extends Command {
+    public LeaveCommand(Server serverHandler) {
         super(serverHandler);
     }
 
     @Override
     public String customBehaviour(ConnectionHandler client, String[] args) {
         var channel = client.getChannel();
-        if (channel != null) {
-            channel.attemptToLeave(client);
+        if (channel == null) {
+            return "You are not in channel!";
         }
         
-        client.shutdown();
-
-        serverHandler.broadcast(client, client.getNickname() + " left the server!");
-
-        return "";
+        return channel.attemptToLeave(client);
     }
 }

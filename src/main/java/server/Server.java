@@ -1,9 +1,6 @@
 package server;
 
-import server.commands.Command;
-import server.commands.ICommand;
-import server.commands.NickCommand;
-import server.commands.QuitCommand;
+import server.commands.*;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -19,16 +16,17 @@ import java.util.concurrent.Executors;
 public class Server implements Runnable {
     private ServerSocket server;
     private ArrayList<ConnectionHandler> connections;
+
+    private HashMap<String, Channel> channels;
     private HashMap<String, ICommand> registeredCommands;
     private ExecutorService threadPool;
 
     private int port;
     private boolean done;
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-
     public Server() {
         this.connections = new ArrayList<>();
+        this.channels = new HashMap<>();
 
         Random random = new Random();
         port = random.nextInt(10000) + 10000;
@@ -62,30 +60,6 @@ public class Server implements Runnable {
         }
     }
 
-    public void broadcast(String message) {
-        String currentTime = formatter.format(LocalTime.now());
-
-        System.out.println(message);
-
-        for (var connection : connections) {
-            if (connection != null) {
-                connection.sendMessage("[" + currentTime + "] " + message);
-            }
-        }
-    }
-
-    public void broadcastExcept(String message, ConnectionHandler except) {
-        String currentTime = formatter.format(LocalTime.now());
-
-        System.out.println(message);
-
-        for (var connection : connections) {
-            if (connection != null && connection != except) {
-                connection.sendMessage("[" + currentTime + "] " + message);
-            }
-        }
-    }
-
     public ICommand getCommand(String command) {
         command = command.replace("/", "");
 
@@ -95,6 +69,73 @@ public class Server implements Runnable {
 
         return registeredCommands.get(command);
     }
+
+    public boolean broadcast(ConnectionHandler sender, String message) {
+        var channel = sender.getChannel();
+        if (channel != null) {
+            channel.broadcast(message);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean broadcastExceptSender(ConnectionHandler sender, String message) {
+        var channel = sender.getChannel();
+        if (channel != null) {
+            channel.broadcastExcept(message, sender);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean registerChannel(Channel newChannel) {
+        if (channels.containsKey(newChannel.getChannelName())) {
+            return false;
+        }
+
+        channels.put(newChannel.getChannelName(), newChannel);
+
+        return true;
+    }
+
+    public Channel getChannelFromName(String name) {
+        if (!channels.containsKey(name)) {
+            return null;
+        }
+
+        return channels.get(name);
+    }
+
+    public String printChannelList() {
+        StringBuilder builder = new StringBuilder("List of available channels:\n");
+
+        if (!channels.isEmpty()) {
+            for (var channel : channels.values()) {
+                String line = "- [" + channel.getChannelName() + "] Current users: " + channel.getNumberOfUsers() + "\n";
+
+                builder.append(line);
+            }
+        }
+
+        else builder.append("<No channels>");
+
+        return builder.toString();
+    }
+
+    public boolean unregisterChannel(Channel newChannel) {
+        if (!channels.containsKey(newChannel.getChannelName())) {
+            return false;
+        }
+
+        channels.remove(newChannel.getChannelName());
+
+        return true;
+    }
+
 
     private void shutdown() {
         try {
@@ -116,7 +157,18 @@ public class Server implements Runnable {
     private void registerCommands() {
         registeredCommands = new HashMap<>();
 
-        registeredCommands.put("nick", new NickCommand(this, Command.Access.MEMBER));
-        registeredCommands.put("quit", new QuitCommand(this, Command.Access.MEMBER));
+        //registeredCommands.put("help", new HelpCommand(this));
+        registeredCommands.put("nick", new NickCommand(this));
+        registeredCommands.put("quit", new QuitCommand(this));
+
+        registeredCommands.put("create_channel", new CreateChannelCommand(this));
+        registeredCommands.put("remove_channel", new RemoveChannelCommand(this));
+
+        registeredCommands.put("join", new JoinCommand(this));
+        registeredCommands.put("leave", new LeaveCommand(this));
+        registeredCommands.put("kick", new KickCommand(this));
+
+        registeredCommands.put("channels", new ChannelListCommand(this));
+        registeredCommands.put("users", new UserListCommand(this));
     }
 }

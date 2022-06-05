@@ -14,6 +14,7 @@ public class ConnectionHandler implements Runnable {
     private BufferedReader input;
     private PrintWriter output;
 
+    private Channel channel;
     private String nickname;
 
     ConnectionHandler(Server server, Socket client) {
@@ -40,7 +41,10 @@ public class ConnectionHandler implements Runnable {
                 }
             }
 
-            server.broadcast(nickname + " joined to the server");
+            sendMessage("Successfully joined to the server!\n" +
+                    "You are currently in the waiting room. To select a room, type /join <name>");
+
+            //TODO: Display list of current opened channels
 
             String message;
             while ((message = input.readLine()) != null) {
@@ -63,9 +67,13 @@ public class ConnectionHandler implements Runnable {
                     if (!output.isEmpty()) {
                         sendMessage(output);
                     }
+
+                    continue;
                 }
 
-                else server.broadcast(nickname + ": " + message);
+                if (!server.broadcast(this, nickname + ": " + message)) {
+                    sendMessage("You are not in channel!");
+                }
             }
         }
 
@@ -97,5 +105,13 @@ public class ConnectionHandler implements Runnable {
 
     public String getNickname() {
         return nickname;
+    }
+
+    public void setChannel(Channel channel) {
+        this.channel = channel;
+    }
+
+    public Channel getChannel() {
+        return channel;
     }
 }
