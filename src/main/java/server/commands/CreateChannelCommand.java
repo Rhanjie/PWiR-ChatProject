@@ -24,9 +24,14 @@ public class CreateChannelCommand extends Command {
             return message;
         }
 
+        var currentChannel = client.getChannel();
+        if (currentChannel != null) {
+            currentChannel.attemptToLeave(client, serverHandler);
+        }
+
         Channel channel = new Channel(channelName, password, client);
         if (!serverHandler.registerChannel(channel)) {
-            return "Problem with creating the channel!";
+            return "Channel with that name is already exists!";
         }
 
         return "Successfully created the channel!";
