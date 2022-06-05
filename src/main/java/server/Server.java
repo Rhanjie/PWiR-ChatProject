@@ -5,35 +5,26 @@ import server.commands.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server implements Runnable {
     private ServerSocket server;
-    private ArrayList<ConnectionHandler> connections;
-
-    private HashMap<String, Channel> channels;
-    private HashMap<String, ICommand> registeredCommands;
     private ExecutorService threadPool;
 
-    private int port;
-    private boolean done;
+    private final ArrayList<ConnectionHandler> connections;
+    private final HashMap<String, Channel> channels;
+    private final HashMap<String, ICommand> registeredCommands;
+
+    private final int port = 20000;
+    private boolean done = false;
 
     public Server() {
         this.connections = new ArrayList<>();
+        this.registeredCommands = new HashMap<>();
         this.channels = new HashMap<>();
-
-        Random random = new Random();
-        port = random.nextInt(10000) + 10000;
-
-        //TODO: Only for tests
-        port = 25565;
-        done = false;
 
         registerCommands();
     }
@@ -126,14 +117,12 @@ public class Server implements Runnable {
         return builder.toString();
     }
 
-    public boolean unregisterChannel(Channel newChannel) {
+    public void unregisterChannel(Channel newChannel) {
         if (!channels.containsKey(newChannel.getChannelName())) {
-            return false;
+            return;
         }
 
         channels.remove(newChannel.getChannelName());
-
-        return true;
     }
 
 
@@ -155,9 +144,7 @@ public class Server implements Runnable {
     }
 
     private void registerCommands() {
-        registeredCommands = new HashMap<>();
-
-        //registeredCommands.put("help", new HelpCommand(this));
+        registeredCommands.put("help", new HelpCommand(this));
         registeredCommands.put("nick", new NickCommand(this));
         registeredCommands.put("quit", new QuitCommand(this));
 
