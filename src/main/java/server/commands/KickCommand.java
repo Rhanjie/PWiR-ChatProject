@@ -10,16 +10,15 @@ public class KickCommand extends Command {
 
     @Override
     public String customBehaviour(ConnectionHandler client, String[] args) {
-        if (args.length < 2) {
-            return "Not enough arguments! You should pass channel name and optionally the password";
+        if (args.length == 0) {
+            return "Not enough arguments! You should pass the nickname of the person you are trying to throw out";
         }
 
-        String channelName = args[0];
-        String nickname = args[1];
+        String nickname = args[0];
 
-        var channel = serverHandler.getChannelFromName(channelName);
+        var channel = client.getChannel();
         if (channel == null) {
-            return "Channel with that name is not exist!";
+            return "You are not in channel!";
         }
 
         try {

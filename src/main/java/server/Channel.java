@@ -84,6 +84,10 @@ public class Channel {
 
         for (ConnectionHandler user : users) {
             if (user.getNickname().equals(nickname)) {
+                if (user == client) {
+                    return "You cannot kick yourself! Use /leave command instead";
+                }
+
                 users.remove(user);
 
                 user.setChannel(null);
