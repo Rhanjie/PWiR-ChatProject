@@ -110,6 +110,22 @@ public class Server implements Runnable {
         return channels.get(name);
     }
 
+    public String printChannelList() {
+        StringBuilder builder = new StringBuilder("List of available channels:\n");
+
+        if (!channels.isEmpty()) {
+            for (var channel : channels.values()) {
+                String line = "- [" + channel.getChannelName() + "] Current users: " + channel.getNumberOfUsers() + "\n";
+
+                builder.append(line);
+            }
+        }
+
+        else builder.append("<No channels>");
+
+        return builder.toString();
+    }
+
     public boolean unregisterChannel(Channel newChannel) {
         if (!channels.containsKey(newChannel.getChannelName())) {
             return false;
@@ -141,6 +157,7 @@ public class Server implements Runnable {
     private void registerCommands() {
         registeredCommands = new HashMap<>();
 
+        //registeredCommands.put("help", new HelpCommand(this));
         registeredCommands.put("nick", new NickCommand(this));
         registeredCommands.put("quit", new QuitCommand(this));
 
@@ -151,11 +168,8 @@ public class Server implements Runnable {
         registeredCommands.put("leave", new LeaveCommand(this));
         registeredCommands.put("kick", new KickCommand(this));
 
-        //TODO: Missing commands
-        //ban ip (admin)
-        //help
-        //list of current channels
-        //list of current users in channel
-        //list of all users in the server
+        registeredCommands.put("channels", new ChannelListCommand(this));
+        //registeredCommands.put("user", new UserListCommand(this));
+        //registeredCommands.put("total_users", new TotalUserListCommand(this));
     }
 }

@@ -54,7 +54,7 @@ public class Channel {
     }
 
     public void closeChannel(ConnectionHandler client) throws IllegalAccessException {
-        if (!isChannelOwner(client)) {
+        if (isNotChannelOwner(client)) {
             throw new IllegalAccessException("You do not have permission to execute this command!");
         }
 
@@ -64,7 +64,7 @@ public class Channel {
     }
 
     public String kickUser(ConnectionHandler client, String nickname) throws IllegalAccessException {
-        if (!isChannelOwner(client)) {
+        if (isNotChannelOwner(client)) {
             throw new IllegalAccessException("You do not have permission to execute this command!");
         }
 
@@ -82,8 +82,8 @@ public class Channel {
         return "User " + nickname + " is not in this channel!";
     }
 
-    public boolean isChannelOwner(ConnectionHandler client) {
-        return client == owner;
+    public boolean isNotChannelOwner(ConnectionHandler client) {
+        return client != owner;
     }
 
     public void broadcast(String message) {
@@ -112,5 +112,9 @@ public class Channel {
 
     public String getChannelName() {
         return channelName;
+    }
+
+    public int getNumberOfUsers() {
+        return users.size();
     }
 }

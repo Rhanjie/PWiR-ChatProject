@@ -3,7 +3,6 @@ package server.commands;
 import server.Channel;
 import server.ConnectionHandler;
 import server.Server;
-import server.Validator;
 
 public class RemoveChannelCommand extends Command {
     public RemoveChannelCommand(Server serverHandler) {
@@ -23,7 +22,7 @@ public class RemoveChannelCommand extends Command {
             return "Channel with that name is not exist!";
         }
 
-        if (!channel.isChannelOwner(client)) {
+        if (channel.isNotChannelOwner(client)) {
             return "You do not have permission to execute this command!";
         }
 
