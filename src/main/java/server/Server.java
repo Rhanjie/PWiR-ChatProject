@@ -93,16 +93,16 @@ public class Server implements Runnable {
         }
 
         channels.put(newChannel.getChannelName(), newChannel);
-
         return true;
     }
 
-    public void unregisterChannel(Channel newChannel) {
+    public boolean unregisterChannel(Channel newChannel) {
         if (!channels.containsKey(newChannel.getChannelName())) {
-            return;
+            return false;
         }
 
         channels.remove(newChannel.getChannelName());
+        return true;
     }
 
     public Channel getChannelFromName(String name) {
