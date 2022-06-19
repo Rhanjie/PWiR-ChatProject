@@ -46,12 +46,6 @@ class CreateChannelCommandTest {
         });
         assertEquals(expected, actual);
 
-        //Case: More than the required arguments
-        actual = command.customBehaviour(client, new String[]{
-                "Testowy kanal", "!@#$QwErtY1234", "blabla", "123321", "^&^@#%^*("
-        });
-        assertEquals(expected, actual);
-
         //Case: Perfect situation
         actual = command.customBehaviour(client, new String[]{"Testowy kanal", "!@#$QwErtY1234"});
 

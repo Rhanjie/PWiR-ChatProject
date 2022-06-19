@@ -47,14 +47,15 @@ class ChannelTest {
         ConnectionHandler clientNotInChannel = new ConnectionHandler(mock(Server.class), mock(Socket.class));
         channel2.attemptToJoin(client, "123 ABc");
 
-        //Client is not in the channel
+        //Case: Client is not in the channel
         String actual = channel2.attemptToLeave(clientNotInChannel, mock(Server.class));
         assertNotEquals(expected, actual);
 
+        //Case: Perfect situation
         actual = channel2.attemptToLeave(client, mock(Server.class));
         assertEquals(expected, actual);
 
-        //Client left the channel earlier
+        //Case: Client left the channel earlier
         actual = channel2.attemptToLeave(clientNotInChannel, mock(Server.class));
         assertNotEquals(expected, actual);
     }
@@ -62,12 +63,12 @@ class ChannelTest {
     @Test @Order(3)
     void isNotChannelOwner() {
         ConnectionHandler owner = new ConnectionHandler(mock(Server.class), mock(Socket.class));
-        ConnectionHandler clientWithoutPermissions = new ConnectionHandler(mock(Server.class), mock(Socket.class));
+        ConnectionHandler client = new ConnectionHandler(mock(Server.class), mock(Socket.class));
 
         channel1 = new Channel("test", "", owner);
 
         assertFalse(channel1.isNotChannelOwner(owner));
-        assertTrue(channel1.isNotChannelOwner(clientWithoutPermissions));
+        assertTrue(channel1.isNotChannelOwner(client));
     }
 
     @Test @Order(4)
