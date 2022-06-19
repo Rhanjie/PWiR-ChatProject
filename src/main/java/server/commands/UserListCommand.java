@@ -9,7 +9,7 @@ public class UserListCommand extends Command {
     }
 
     @Override
-    public String customBehaviour(ConnectionHandler client, String[] args) {
+    protected String customBehaviour(ConnectionHandler client, String[] args) {
         var channel = client.getChannel();
         if (channel == null) {
             return "You are not in channel!";

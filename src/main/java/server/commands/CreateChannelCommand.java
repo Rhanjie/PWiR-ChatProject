@@ -11,7 +11,7 @@ public class CreateChannelCommand extends Command {
     }
 
     @Override
-    public String customBehaviour(ConnectionHandler client, String[] args) {
+    protected String customBehaviour(ConnectionHandler client, String[] args) {
         if (args.length == 0) {
             return "Not enough arguments! You should pass channel name and optionally the password";
         }
@@ -19,9 +19,14 @@ public class CreateChannelCommand extends Command {
         String channelName = args[0];
         String password = (args.length >= 2) ? args[1] : "";
 
-        String message = Validator.validateChannelName(channelName);
+        String message = Validator.validateChannelName(channelName, serverHandler);
         if (!message.isEmpty()) {
             return message;
+        }
+
+        Channel channel = new Channel(channelName, password, client);
+        if (!serverHandler.registerChannel(channel)) {
+            return "Channel with that name is already exists!";
         }
 
         var currentChannel = client.getChannel();
@@ -29,10 +34,7 @@ public class CreateChannelCommand extends Command {
             currentChannel.attemptToLeave(client, serverHandler);
         }
 
-        Channel channel = new Channel(channelName, password, client);
-        if (!serverHandler.registerChannel(channel)) {
-            return "Channel with that name is already exists!";
-        }
+        channel.attemptToJoin(client, password);
 
         return "Successfully created the channel!";
     }

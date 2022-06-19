@@ -1,6 +1,5 @@
 package server.commands;
 
-import server.Channel;
 import server.ConnectionHandler;
 import server.Server;
 
@@ -10,7 +9,7 @@ public class LeaveCommand extends Command {
     }
 
     @Override
-    public String customBehaviour(ConnectionHandler client, String[] args) {
+    protected String customBehaviour(ConnectionHandler client, String[] args) {
         var channel = client.getChannel();
         if (channel == null) {
             return "You are not in channel!";

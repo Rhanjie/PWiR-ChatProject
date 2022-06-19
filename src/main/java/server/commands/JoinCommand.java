@@ -1,9 +1,7 @@
 package server.commands;
 
-import server.Channel;
 import server.ConnectionHandler;
 import server.Server;
-import server.Validator;
 
 public class JoinCommand extends Command {
     public JoinCommand(Server serverHandler, String helpInfo) {
@@ -11,7 +9,7 @@ public class JoinCommand extends Command {
     }
 
     @Override
-    public String customBehaviour(ConnectionHandler client, String[] args) {
+    protected String customBehaviour(ConnectionHandler client, String[] args) {
         if (args.length == 0) {
             return "Not enough arguments! You should pass channel name and optionally the password";
         }
