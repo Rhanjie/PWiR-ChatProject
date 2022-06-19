@@ -17,18 +17,9 @@ public class ConnectionHandler implements Runnable {
     private Channel channel;
     private String nickname;
 
-    ConnectionHandler(Server server, Socket client) {
+    public ConnectionHandler(Server server, Socket client) {
         this.server = server;
         this.client = client;
-
-        try {
-            input = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            output = new PrintWriter(client.getOutputStream(), true);
-        }
-
-        catch (IOException exception) {
-            shutdown();
-        }
     }
 
     @Override
@@ -45,6 +36,15 @@ public class ConnectionHandler implements Runnable {
     }
 
     private void init() throws IOException {
+        try {
+            input = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            output = new PrintWriter(client.getOutputStream(), true);
+        }
+
+        catch (IOException exception) {
+            shutdown();
+        }
+
         String givenNickname = "";
 
         boolean isNicknameValid = false;
