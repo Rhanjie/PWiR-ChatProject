@@ -87,7 +87,7 @@ class ChannelTest {
     }
 
     @Test @Order(5)
-    void kickUser() {
+    void kickUser() throws IllegalAccessException {
         ConnectionHandler owner = new ConnectionHandler(mock(Server.class), mock(Socket.class));
         ConnectionHandler member = spy(new ConnectionHandler(mock(Server.class), mock(Socket.class)));
 
@@ -108,24 +108,18 @@ class ChannelTest {
             channel1.kickUser(member, owner.getNickname());
         });
 
-        try {
-            String expected = "";
+        String expected = "";
 
-            //Case: Kick yourself
-            String actual = channel1.kickUser(owner, owner.getNickname());
-            assertNotEquals(expected, actual);
+        //Case: Kick yourself
+        String actual = channel1.kickUser(owner, owner.getNickname());
+        assertNotEquals(expected, actual);
 
-            //Case: Correct kick
-            actual = channel1.kickUser(owner, member.getNickname());
-            assertEquals(expected, actual);
+        //Case: Correct kick
+        actual = channel1.kickUser(owner, member.getNickname());
+        assertEquals(expected, actual);
 
-            //Case: Kick the client that already kicked
-            actual = channel1.kickUser(owner, member.getNickname());
-            assertNotEquals(expected, actual);
-        }
-
-        catch (IllegalAccessException exception) {
-            fail("Found exception in unexpected place. Check the test!");
-        }
+        //Case: Kick the client that already kicked
+        actual = channel1.kickUser(owner, member.getNickname());
+        assertNotEquals(expected, actual);
     }
 }
