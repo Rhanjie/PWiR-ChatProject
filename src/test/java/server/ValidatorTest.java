@@ -55,8 +55,7 @@ class ValidatorTest {
     void validateChannelName() {
         String channelName = "test";
         String actual = Validator.validateChannelName(channelName, server);
-        String expected = "";
-        assertEquals(expected, actual);
+        assertTrue(actual.isEmpty());
 
         channelName = null;
         actual = Validator.validateChannelName(channelName, server);
