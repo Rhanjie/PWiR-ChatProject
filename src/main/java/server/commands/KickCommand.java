@@ -9,7 +9,7 @@ public class KickCommand extends Command {
     }
 
     @Override
-    public String customBehaviour(ConnectionHandler client, String[] args) {
+    protected String customBehaviour(ConnectionHandler client, String[] args) {
         if (args.length == 0) {
             return "Not enough arguments! You should pass the nickname of the person you are trying to throw out";
         }

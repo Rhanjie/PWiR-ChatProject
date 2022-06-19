@@ -10,7 +10,7 @@ public class RemoveChannelCommand extends Command {
     }
 
     @Override
-    public String customBehaviour(ConnectionHandler client, String[] args) {
+    protected String customBehaviour(ConnectionHandler client, String[] args) {
         if (args.length == 0) {
             return "Not enough arguments! You should pass channel name";
         }

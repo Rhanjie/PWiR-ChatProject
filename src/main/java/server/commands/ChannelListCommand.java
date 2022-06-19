@@ -9,7 +9,7 @@ public class ChannelListCommand extends Command {
     }
 
     @Override
-    public String customBehaviour(ConnectionHandler client, String[] args) {
+    protected String customBehaviour(ConnectionHandler client, String[] args) {
         return serverHandler.printChannelList();
     }
 }

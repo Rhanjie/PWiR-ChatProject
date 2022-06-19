@@ -10,7 +10,7 @@ public class NickCommand extends Command {
     }
 
     @Override
-    public String customBehaviour(ConnectionHandler client, String[] args) {
+    protected String customBehaviour(ConnectionHandler client, String[] args) {
         String nickname = String.join(" ", args);
         String message = Validator.validateNickname(nickname, serverHandler);
 

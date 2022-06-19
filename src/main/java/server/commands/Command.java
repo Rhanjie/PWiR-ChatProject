@@ -21,5 +21,5 @@ public abstract class Command implements ICommand {
         return helpInfo;
     }
 
-    public abstract String customBehaviour(ConnectionHandler client, String[] args);
+    protected abstract String customBehaviour(ConnectionHandler client, String[] args);
 }
