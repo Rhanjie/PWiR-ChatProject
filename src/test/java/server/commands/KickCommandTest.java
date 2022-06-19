@@ -18,6 +18,7 @@ class KickCommandTest {
     Server server;
 
     ConnectionHandler owner;
+    ConnectionHandler member;
     Channel channel;
 
     @BeforeEach
@@ -25,16 +26,12 @@ class KickCommandTest {
         server = mock(Server.class);
 
         owner = new ConnectionHandler(mock(Server.class), mock(Socket.class));
+        member = spy(new ConnectionHandler(mock(Server.class), mock(Socket.class)));
         channel = spy(new Channel("Testowy kanal", "", owner));
 
         when(server.getChannelFromName("Testowy kanal")).thenReturn(channel);
 
         command = new KickCommand(server, "");
-    }
-
-    @Test
-    void customBehaviour() {
-        ConnectionHandler member = spy(new ConnectionHandler(mock(Server.class), mock(Socket.class)));
 
         owner.setNickname("owner");
         member.setNickname("member");
@@ -42,7 +39,10 @@ class KickCommandTest {
         //Ignore problematic methods' behaviour
         doNothing().when(channel).broadcast(any());
         doNothing().when(member).sendMessage(any());
+    }
 
+    @Test
+    void customBehaviour() {
         String expected = "You have successfully kicked " + member.getNickname() + " from the channel!";
 
         //Case: no arguments
