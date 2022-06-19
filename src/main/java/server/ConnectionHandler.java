@@ -20,73 +20,87 @@ public class ConnectionHandler implements Runnable {
     ConnectionHandler(Server server, Socket client) {
         this.server = server;
         this.client = client;
+
+        try {
+            input = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            output = new PrintWriter(client.getOutputStream(), true);
+        }
+
+        catch (IOException exception) {
+            shutdown();
+        }
     }
 
     @Override
     public void run() {
         try {
-            input = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            output = new PrintWriter(client.getOutputStream(), true);
+            init();
 
-            String givenNickname = "";
+            serveClientRequests();
+        }
 
-            boolean isNicknameValid = false;
-            while (!isNicknameValid) {
-                sendMessage("Please enter a nickname: ");
-                givenNickname = input.readLine();
+        catch (IOException exception) {
+            shutdown();
+        }
+    }
 
-                String message = Validator.validateNickname(givenNickname, server);
-                isNicknameValid = message.isEmpty();
+    private void init() throws IOException {
+        String givenNickname = "";
 
-                if (!message.isEmpty()) {
-                    sendMessage(message);
-                }
+        boolean isNicknameValid = false;
+        while (!isNicknameValid) {
+            sendMessage("Please enter a nickname: ");
+            givenNickname = input.readLine();
+
+            String message = Validator.validateNickname(givenNickname, server);
+            isNicknameValid = message.isEmpty();
+
+            if (!message.isEmpty()) {
+                sendMessage(message);
             }
+        }
 
-            nickname = givenNickname;
+        nickname = givenNickname;
 
-            sendMessage("""
+        sendMessage("""
                     Successfully joined to the server!
                     
                     You are currently in the waiting room. To select a room, type /join <name>
                     To display available commands, type /help
                     """);
 
-            sendMessage(server.printChannelList());
+        sendMessage(server.printChannelList());
+    }
 
-            String message;
-            while ((message = input.readLine()) != null) {
-                boolean isCommand = message.startsWith("/");
+    private void serveClientRequests() throws IOException {
+        String message;
+        while ((message = input.readLine()) != null) {
+            boolean isCommand = message.startsWith("/");
 
-                if (isCommand) {
-                    String[] splittedMessage = message.split(" ", 2);
-                    String[] args = (splittedMessage.length == 2)
-                            ? splittedMessage[1].split(" ")
-                            : new String[0];
+            if (isCommand) {
+                String[] splittedMessage = message.split(" ", 2);
+                String[] args = (splittedMessage.length == 2)
+                        ? splittedMessage[1].split(" ")
+                        : new String[0];
 
-                    ICommand command = server.getCommand(splittedMessage[0]);
-                    if (command == null) {
-                        sendMessage("Unknown command!");
-
-                        continue;
-                    }
-
-                    String output = command.execute(this, args);
-                    if (!output.isEmpty()) {
-                        sendMessage(output);
-                    }
+                ICommand command = server.getCommand(splittedMessage[0]);
+                if (command == null) {
+                    sendMessage("Unknown command!");
 
                     continue;
                 }
 
-                if (!server.broadcast(this, nickname + ": " + message)) {
-                    sendMessage("You are not in channel!");
+                String output = command.execute(this, args);
+                if (!output.isEmpty()) {
+                    sendMessage(output);
                 }
-            }
-        }
 
-        catch (IOException exception) {
-            shutdown();
+                continue;
+            }
+
+            if (!server.broadcast(this, nickname + ": " + message)) {
+                sendMessage("You are not in channel!");
+            }
         }
     }
 

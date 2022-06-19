@@ -111,7 +111,7 @@ class ChannelTest {
         try {
             String expected = "";
 
-            //Kick yourself
+            //Case: Kick yourself
             String actual = channel1.kickUser(owner, owner.getNickname());
             assertNotEquals(expected, actual);
 
