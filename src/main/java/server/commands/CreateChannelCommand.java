@@ -19,7 +19,7 @@ public class CreateChannelCommand extends Command {
         String channelName = args[0];
         String password = (args.length >= 2) ? args[1] : "";
 
-        String message = Validator.validateChannelName(channelName);
+        String message = Validator.validateChannelName(channelName, serverHandler);
         if (!message.isEmpty()) {
             return message;
         }

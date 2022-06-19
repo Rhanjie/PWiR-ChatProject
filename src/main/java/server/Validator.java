@@ -21,7 +21,7 @@ public class Validator {
         return "";
     }
 
-    public static String validateChannelName(String channelName) {
+    public static String validateChannelName(String channelName, Server serverHandler) {
         if (channelName == null || channelName.isEmpty()) {
             return "[ERROR] You did not enter a channel name!";
         }
@@ -32,6 +32,10 @@ public class Validator {
 
         if (!channelName.matches("[a-zA-Z0-9 _-]*")) {
             return "[ERROR] The nickname can only contain letters, numbers and simple characters like '-' '_'!";
+        }
+
+        if (serverHandler.getChannelFromName(channelName) != null) {
+            return "[ERROR] Given channel name is already used! Choose another one";
         }
 
         return "";

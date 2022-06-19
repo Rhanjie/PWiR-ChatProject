@@ -53,30 +53,37 @@ class ValidatorTest {
 
     @Test
     void validateChannelName() {
+        Server server = mock(Server.class);
+
         String channelName = "test";
-        String actual = Validator.validateChannelName(channelName);
+        String actual = Validator.validateChannelName(channelName, server);
         String expected = "";
         assertEquals(expected, actual);
 
         channelName = null;
-        actual = Validator.validateChannelName(channelName);
+        actual = Validator.validateChannelName(channelName, server);
         assertFalse(actual.isEmpty());
 
         channelName = "";
-        actual = Validator.validateChannelName(channelName);
+        actual = Validator.validateChannelName(channelName, server);
         assertFalse(actual.isEmpty());
 
         channelName = "123456789012345678901";
-        actual = Validator.validateChannelName(channelName);
+        actual = Validator.validateChannelName(channelName, server);
         assertFalse(actual.isEmpty());
 
         channelName = "1290 -_fdsa  ";
-        actual = Validator.validateChannelName(channelName);
+        actual = Validator.validateChannelName(channelName, server);
         assertTrue(actual.isEmpty());
 
         channelName = "1290 #_fdsa  ";
-        actual = Validator.validateChannelName(channelName);
+        actual = Validator.validateChannelName(channelName, server);
         assertFalse(actual.isEmpty());
+
+        channelName = "Duplicated name";
+        when(server.getChannelFromName(channelName)).thenReturn(mock(Channel.class));
+        actual = Validator.validateChannelName(channelName, server);
+        assertTrue(actual.isEmpty());
     }
 
 }
