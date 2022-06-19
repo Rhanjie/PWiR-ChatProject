@@ -52,6 +52,10 @@ public class Server implements Runnable {
     }
 
     public ICommand getCommand(String command) {
+        if (command == null) {
+            return null;
+        }
+
         command = command.replace("/", "");
 
         if (!registeredCommands.containsKey(command)) {
@@ -93,6 +97,14 @@ public class Server implements Runnable {
         return true;
     }
 
+    public void unregisterChannel(Channel newChannel) {
+        if (!channels.containsKey(newChannel.getChannelName())) {
+            return;
+        }
+
+        channels.remove(newChannel.getChannelName());
+    }
+
     public Channel getChannelFromName(String name) {
         if (!channels.containsKey(name)) {
             return null;
@@ -129,12 +141,8 @@ public class Server implements Runnable {
         return builder.toString();
     }
 
-    public void unregisterChannel(Channel newChannel) {
-        if (!channels.containsKey(newChannel.getChannelName())) {
-            return;
-        }
-
-        channels.remove(newChannel.getChannelName());
+    public int getChannelsAmount() {
+        return channels.size();
     }
 
     public ConnectionHandler getConnectionFromNickname(String nickname) {
