@@ -7,14 +7,15 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ValidatorTest {
+    Server server;
 
     @BeforeEach
     void setUp() {
+        server = mock(Server.class);
     }
 
     @Test
     void validateNicknameCannotConnectTwice() {
-        Server server = mock(Server.class);
         String nickname = "test";
         when(server.getConnectionFromNickname(nickname)).thenReturn(null);
 
@@ -30,8 +31,7 @@ class ValidatorTest {
     }
 
     @Test
-    void validateNicknameCannotBeNull() {
-        Server server = mock(Server.class);
+    void validateNickname() {
         when(server.getConnectionFromNickname(any())).thenReturn(null);
 
         String nickname = "test";
@@ -53,8 +53,6 @@ class ValidatorTest {
 
     @Test
     void validateChannelName() {
-        Server server = mock(Server.class);
-
         String channelName = "test";
         String actual = Validator.validateChannelName(channelName, server);
         String expected = "";
@@ -83,7 +81,6 @@ class ValidatorTest {
         channelName = "Duplicated name";
         when(server.getChannelFromName(channelName)).thenReturn(mock(Channel.class));
         actual = Validator.validateChannelName(channelName, server);
-        assertTrue(actual.isEmpty());
+        assertFalse(actual.isEmpty());
     }
-
 }
