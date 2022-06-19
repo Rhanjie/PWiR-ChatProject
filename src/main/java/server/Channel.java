@@ -9,17 +9,13 @@ public class Channel {
     private final String password;
 
     private final ConnectionHandler owner;
-    private final ArrayList<ConnectionHandler> users;
+    private final ArrayList<ConnectionHandler> users = new ArrayList<>();
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     public Channel(String channelName, String password, ConnectionHandler client) {
         this.channelName = channelName;
         this.password = password;
 
-        users = new ArrayList<>();
-        users.add(client);
-
-        client.setChannel(this);
         owner = client;
     }
 

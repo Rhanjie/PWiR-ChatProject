@@ -1,6 +1,7 @@
 package server;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,7 +34,7 @@ class ServerTest {
     void getChannelFromName() {
     }
 
-    @Test
+    @Test @Order(1)
     void printChannelList() {
         String actual = server.printChannelList();
         String expected = "List of available channels:\n<No channels>";
@@ -44,8 +45,14 @@ class ServerTest {
         server.registerChannel(channel);
 
         actual = server.printChannelList();
-        assertEquals(1, channel.getNumberOfUsers());
+        assertEquals(0, channel.getNumberOfUsers());
 
+        expected = "List of available channels:\n- [test] Current users: 0\n";
+        assertEquals(expected, actual);
+
+        channel.attemptToJoin(mock(ConnectionHandler.class), "");
+
+        actual = server.printChannelList();
         expected = "List of available channels:\n- [test] Current users: 1\n";
         assertEquals(expected, actual);
     }
