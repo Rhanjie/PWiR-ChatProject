@@ -20,10 +20,11 @@ class ServerTest {
 
     @Test @Order(1)
     void getCommand() {
-        assertNotNull(server.getCommand("nick"));
+        assertNotNull(server.getCommand("help"));
         assertNotNull(server.getCommand("create_channel"));
         assertNotNull(server.getCommand("kick"));
 
+        assertNull(server.getCommand("nick"));
         assertNull(server.getCommand("abc"));
         assertNull(server.getCommand(""));
         assertNull(server.getCommand(null));
