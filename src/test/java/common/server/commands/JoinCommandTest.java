@@ -1,6 +1,5 @@
-package server.commands;
+package common.server.commands;
 
-import common.server.commands.JoinCommand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import common.server.Channel;

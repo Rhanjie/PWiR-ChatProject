@@ -1,12 +1,12 @@
-package server.commands;
+package common.server.commands;
 
-import common.server.commands.KickCommand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import common.server.Channel;
 import common.server.ConnectionHandler;
 import common.server.Server;
 
+import java.io.IOException;
 import java.net.Socket;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,19 +23,19 @@ class KickCommandTest {
     Channel channel;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
         server = mock(Server.class);
 
-        owner = new ConnectionHandler(mock(Server.class), mock(Socket.class));
-        member = spy(new ConnectionHandler(mock(Server.class), mock(Socket.class)));
+        owner = new ConnectionHandler(mock(Server.class));
+        member = spy(new ConnectionHandler(mock(Server.class)));
         channel = spy(new Channel("Testowy kanal", "", owner));
 
         when(server.getChannelFromName("Testowy kanal")).thenReturn(channel);
 
         command = new KickCommand(server, "");
 
-        owner.setNickname("owner");
-        member.setNickname("member");
+        owner.init("owner");
+        member.init("member");
 
         //Ignore problematic methods' behaviour
         doNothing().when(channel).broadcast(any());

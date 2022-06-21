@@ -1,6 +1,5 @@
-package server.commands;
+package common.server.commands;
 
-import common.server.commands.RemoveChannelCommand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import common.server.Channel;
@@ -27,8 +26,8 @@ class RemoveChannelCommandTest {
         server = mock(Server.class);
         command = new RemoveChannelCommand(server, "");
 
-        owner = new ConnectionHandler(server, mock(Socket.class));
-        client = spy(new ConnectionHandler(server, mock(Socket.class)));
+        owner = new ConnectionHandler(server);
+        client = spy(new ConnectionHandler(server));
 
         channel = spy(new Channel("RemoveTest", "", owner));
         channel.attemptToJoin(owner, "");

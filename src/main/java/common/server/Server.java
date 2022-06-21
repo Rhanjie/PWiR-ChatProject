@@ -187,7 +187,6 @@ public class Server extends UnicastRemoteObject implements RMIInterface {
 
     private void registerCommands() {
         registeredCommands.put("help", new HelpCommand(this, "Display list of commands"));
-        registeredCommands.put("nick", new NickCommand(this, "Change nick"));
         registeredCommands.put("quit", new QuitCommand(this, "Quit the server"));
 
         registeredCommands.put("create_channel", new CreateChannelCommand(this, "Create new channel with given name and optionally password"));

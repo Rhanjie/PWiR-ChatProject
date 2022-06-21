@@ -13,8 +13,8 @@ public class Main {
             client.serve();
         }
 
-        catch (NotBoundException | IOException e) {
-            e.printStackTrace();
+        catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 }

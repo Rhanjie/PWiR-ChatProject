@@ -37,7 +37,9 @@ public class NonBlockingBufferedReader {
     public String readLine() throws IOException {
         try {
             return closed && lines.isEmpty() ? null : lines.poll(500L, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
+        }
+
+        catch (InterruptedException e) {
             throw new IOException("The BackgroundReaderThread was interrupted!", e);
         }
     }

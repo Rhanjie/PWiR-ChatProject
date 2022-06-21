@@ -12,6 +12,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Client {
@@ -39,11 +40,16 @@ public class Client {
         reader = new NonBlockingBufferedReader(new BufferedReader(inputStreamReader));
     }
 
-    public void serve() throws IOException {
+    public void serve() throws Exception {
         while (true) {
             response = rmiService.getLastMessage(nickname);
-            if (response != null)
+            if (response != null) {
                 System.out.println(response);
+
+                if (response.equals("You are not logged on to the server!")) {
+                    rmiService.shutdown(nickname);
+                }
+            }
 
             var message = reader.readLine();
             if (message != null) {

@@ -1,13 +1,10 @@
-package server;
+package common.server;
 
-import common.server.Channel;
-import common.server.ConnectionHandler;
-import common.server.Server;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
-import java.net.Socket;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,8 +43,8 @@ class ChannelTest {
     @Test @Order(2)
     void attemptToLeave() {
         String expected = "You have successfully left the channel!";
-        ConnectionHandler client = new ConnectionHandler(mock(Server.class), mock(Socket.class));
-        ConnectionHandler clientNotInChannel = new ConnectionHandler(mock(Server.class), mock(Socket.class));
+        ConnectionHandler client = new ConnectionHandler(mock(Server.class));
+        ConnectionHandler clientNotInChannel = new ConnectionHandler(mock(Server.class));
         channel2.attemptToJoin(client, "123 ABc");
 
         //Case: Client is not in the channel
@@ -65,8 +62,8 @@ class ChannelTest {
 
     @Test @Order(3)
     void isNotChannelOwner() {
-        ConnectionHandler owner = new ConnectionHandler(mock(Server.class), mock(Socket.class));
-        ConnectionHandler client = new ConnectionHandler(mock(Server.class), mock(Socket.class));
+        ConnectionHandler owner = new ConnectionHandler(mock(Server.class));
+        ConnectionHandler client = new ConnectionHandler(mock(Server.class));
 
         channel1 = new Channel("test", "", owner);
 
@@ -76,8 +73,8 @@ class ChannelTest {
 
     @Test @Order(4)
     void closeChannel() {
-        ConnectionHandler owner = new ConnectionHandler(mock(Server.class), mock(Socket.class));
-        ConnectionHandler clientWithoutPermissions = new ConnectionHandler(mock(Server.class), mock(Socket.class));
+        ConnectionHandler owner = new ConnectionHandler(mock(Server.class));
+        ConnectionHandler clientWithoutPermissions = new ConnectionHandler(mock(Server.class));
 
         channel1 = new Channel("test", "", owner);
 
@@ -91,12 +88,12 @@ class ChannelTest {
     }
 
     @Test @Order(5)
-    void kickUser() throws IllegalAccessException {
-        ConnectionHandler owner = new ConnectionHandler(mock(Server.class), mock(Socket.class));
-        ConnectionHandler member = spy(new ConnectionHandler(mock(Server.class), mock(Socket.class)));
+    void kickUser() throws IllegalAccessException, IOException {
+        ConnectionHandler owner = new ConnectionHandler(mock(Server.class));
+        ConnectionHandler member = spy(new ConnectionHandler(mock(Server.class)));
 
-        owner.setNickname("owner");
-        member.setNickname("member");
+        owner.init("owner");
+        member.init("member");
 
         channel1 = spy(new Channel("test", "", owner));
 

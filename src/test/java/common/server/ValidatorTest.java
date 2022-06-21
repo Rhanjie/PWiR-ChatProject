@@ -1,9 +1,5 @@
-package server;
+package common.server;
 
-import common.server.Channel;
-import common.server.ConnectionHandler;
-import common.server.Server;
-import common.server.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;

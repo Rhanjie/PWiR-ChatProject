@@ -76,10 +76,6 @@ public class ConnectionHandler {
         //TODO
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
     public String getNickname() {
         return nickname;
     }
