@@ -19,7 +19,7 @@ public class ConnectionHandler {
 
     public String init(String givenNickname) throws IOException {
         String message = Validator.validateNickname(nickname, server);
-        boolean isNicknameValid = message.isEmpty();
+        boolean isNicknameValid = !message.isEmpty();
 
         if (!isNicknameValid) {
             return message;
@@ -61,7 +61,7 @@ public class ConnectionHandler {
             return "You are not in channel!";
         }
 
-        return "Message sent!";
+        return "";
     }
 
     public void sendMessage(String message) {

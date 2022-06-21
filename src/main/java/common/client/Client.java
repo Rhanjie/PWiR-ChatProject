@@ -26,6 +26,7 @@ public class Client {
         rmiService = (RMIInterface) registry.lookup("ChatServer");
 
         do {
+            System.out.println("Give a nickname: ");
             Scanner scanner = new Scanner(System.in);
             nickname = scanner.nextLine();
 
@@ -43,12 +44,18 @@ public class Client {
                 System.out.println(response);
 
             var message = reader.readLine();
-            if (message.equalsIgnoreCase("quit")) {
-                //rmiService.shutdown(nickname);
-                return;
-            }
+            if (message != null) {
+                if (message.equalsIgnoreCase("quit")) {
+                    rmiService.shutdown(nickname);
 
-            rmiService.sendRequest(nickname, message);
+                    return;
+                }
+
+                response = rmiService.sendRequest(nickname, message);
+                if (!response.isEmpty()) {
+                    System.out.println(response);
+                }
+            }
         }
     }
 
