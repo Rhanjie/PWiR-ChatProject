@@ -1,30 +1,59 @@
 package common.client;
 
+import common.RMIInterface;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
 import java.net.Socket;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.Scanner;
 
-public class Client implements Runnable {
-    private Socket client;
-    private BufferedReader input;
-    private PrintWriter output;
+public class Client {
+    private static RMIInterface rmiService;
 
-    private boolean done = false;
-    private final String IP;
+    NonBlockingBufferedReader reader;
+    String nickname = "";
+    String response;
 
-    Client(String IP) {
-        this.IP = IP;
+    Client(String IP) throws RemoteException, MalformedURLException, NotBoundException {
+        Registry registry = LocateRegistry.getRegistry(20000);
+        rmiService = (RMIInterface) registry.lookup("ChatServer");
+
+        do {
+            Scanner scanner = new Scanner(System.in);
+            nickname = scanner.nextLine();
+
+            response = rmiService.init(nickname);
+        } while (!response.contains("Successfully joined to the server!"));
+
+        InputStreamReader inputStreamReader = new InputStreamReader(System.in);
+        reader = new NonBlockingBufferedReader(new BufferedReader(inputStreamReader));
     }
 
-    @Override
-    public void run() {
-        try {
-            client = new Socket(IP, 20000);
-            input = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            output = new PrintWriter(client.getOutputStream(), true);
+    public void serve() throws IOException {
+        while (true) {
+            response = rmiService.getLastMessage(nickname);
+            if (response != null)
+                System.out.println(response);
 
+            var message = reader.readLine();
+            if (message.equalsIgnoreCase("quit")) {
+                //rmiService.shutdown(nickname);
+                return;
+            }
+
+            rmiService.sendRequest(nickname, message);
+        }
+    }
+
+    /*public void run() {
+        try {
             InputHandler handler = new InputHandler(this);
             Thread thread = new Thread(handler);
             thread.start();
@@ -40,33 +69,5 @@ public class Client implements Runnable {
 
             shutdown();
         }
-    }
-
-    public void sendMessage(String message) {
-        output.println(message);
-    }
-
-    public void shutdown() {
-        try {
-            done = true;
-
-            if (input != null) {
-                input.close();
-            }
-
-            if (output != null) {
-                output.close();
-            }
-
-            if (client != null && !client.isClosed()) {
-                client.close();
-            }
-        }
-
-        catch (IOException ignored) { }
-    }
-
-    public boolean isDone() {
-        return done;
-    }
+    }*/
 }

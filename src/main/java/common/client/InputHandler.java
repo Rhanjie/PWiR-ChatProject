@@ -13,7 +13,7 @@ public class InputHandler implements Runnable {
 
     @Override
     public void run() {
-        try {
+        /*try {
             BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
             while (!client.isDone()) {
@@ -30,6 +30,6 @@ public class InputHandler implements Runnable {
 
         catch (IOException exception) {
             client.shutdown();
-        }
+        }*/
     }
 }

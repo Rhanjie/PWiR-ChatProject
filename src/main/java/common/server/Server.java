@@ -1,19 +1,15 @@
 package common.server;
 
-import common.RMInterface;
+import common.RMIInterface;
 import common.server.commands.*;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-public class Server extends UnicastRemoteObject implements RMInterface {
+public class Server extends UnicastRemoteObject implements RMIInterface {
     private final ArrayList<ConnectionHandler> connections;
     private final HashMap<String, Channel> channels;
     private final HashMap<String, ICommand> registeredCommands;
@@ -80,7 +76,7 @@ public class Server extends UnicastRemoteObject implements RMInterface {
     }
 
     @Override
-    public void shutdown(String nickname) {
+    public void shutdown(String nickname) throws RemoteException {
         var connection = getConnectionFromNickname(nickname);
         if (connection == null) {
             return;
@@ -114,6 +110,19 @@ public class Server extends UnicastRemoteObject implements RMInterface {
 
         return false;
     }
+
+    public boolean broadcastExceptSender(ConnectionHandler sender, String message) {
+        var channel = sender.getChannel();
+        if (channel != null) {
+            channel.broadcastExcept(message, sender);
+
+            return true;
+        }
+
+        return false;
+    }
+
+
 
     public boolean registerChannel(Channel newChannel) {
         if (channels.containsKey(newChannel.getChannelName())) {

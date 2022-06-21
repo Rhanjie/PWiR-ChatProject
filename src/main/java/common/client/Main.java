@@ -1,17 +1,25 @@
 package common.client;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Enter server IP:");
+        try {
+            //System.out.println("Enter server IP:");
 
-        Scanner scanner = new Scanner(System.in);
-        String IP = scanner.next();
+            //Scanner scanner = new Scanner(System.in);
+            //String IP = scanner.next();
 
-        Client client = new Client(IP);
-        Thread thread = new Thread(client);
+            Client client = new Client("");
+            client.serve();
+        }
 
-        thread.start();
+        catch (NotBoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 }
