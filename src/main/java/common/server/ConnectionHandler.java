@@ -21,7 +21,7 @@ public class ConnectionHandler {
         this.server = server;
     }
 
-    public String init(String givenNickname) throws IOException, RemoteException {
+    public String init(String givenNickname) throws IOException {
         String message = Validator.validateNickname(nickname, server);
         boolean isNicknameValid = message.isEmpty();
 

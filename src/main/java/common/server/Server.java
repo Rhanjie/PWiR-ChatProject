@@ -15,9 +15,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server extends UnicastRemoteObject implements RMInterface {
-    private ServerSocket server;
-    private ExecutorService threadPool;
-
     private final ArrayList<ConnectionHandler> connections;
     private final HashMap<String, Channel> channels;
     private final HashMap<String, ICommand> registeredCommands;
@@ -33,26 +30,54 @@ public class Server extends UnicastRemoteObject implements RMInterface {
     }
 
     @Override
-    public void run() {
+    public String init(String givenNickname) throws RemoteException {
+        ConnectionHandler handler = new ConnectionHandler(this);
+
+        String response;
+
         try {
-            server = new ServerSocket(port);
-            threadPool = Executors.newCachedThreadPool();
+            response = handler.init(givenNickname);
 
-            System.out.println("Server is started at the port #" + port);
-
-            while (!done) {
-                Socket client = server.accept();
-                ConnectionHandler handler = new ConnectionHandler(this, client);
-
-                connections.add(handler);
-                threadPool.execute(handler);
+            if (!response.contains("Successfully joined to the server!")) {
+                return response;
             }
         }
 
         catch (IOException exception) {
-            shutdown();
+            exception.printStackTrace();
+
+            return "An internal error has occured!";
         }
+
+        connections.add(handler);
+        return response;
     }
+
+    @Override
+    public String sendRequest(String nickname, String message) throws IOException {
+        var connection = getConnectionFromNickname(nickname);
+        if (connection == null) {
+            return "You are not logged on to the server";
+        }
+
+        return connection.sendRequest(message);
+    }
+
+    @Override
+    public String getLastMessage(String nickname) throws IOException {
+        return "TODO";
+    }
+
+    @Override
+    public void shutdown(String nickname) {
+        var connection = getConnectionFromNickname(nickname);
+        if (connection == null) {
+            return;
+        }
+
+        connection.shutdown();
+    }
+
 
     public ICommand getCommand(String command) {
         if (command == null) {
@@ -72,17 +97,6 @@ public class Server extends UnicastRemoteObject implements RMInterface {
         var channel = sender.getChannel();
         if (channel != null) {
             channel.broadcast(message);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean broadcastExceptSender(ConnectionHandler sender, String message) {
-        var channel = sender.getChannel();
-        if (channel != null) {
-            channel.broadcastExcept(message, sender);
 
             return true;
         }
@@ -156,23 +170,6 @@ public class Server extends UnicastRemoteObject implements RMInterface {
         }
 
         return null;
-    }
-
-    public void shutdown() {
-        try {
-            done = true;
-
-            threadPool.shutdown();
-            if (!server.isClosed()) {
-                server.close();
-            }
-
-            for (var connection : connections) {
-                connection.shutdown();
-            }
-        }
-
-        catch (IOException ignored) { }
     }
 
     private void registerCommands() {
