@@ -1,6 +1,6 @@
-package server.commands;
+package common.server.commands;
 
-import server.ConnectionHandler;
+import common.server.ConnectionHandler;
 
 public interface ICommand {
     public String execute(ConnectionHandler client, String[] args);

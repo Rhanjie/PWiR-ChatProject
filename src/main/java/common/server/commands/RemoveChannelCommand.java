@@ -1,8 +1,8 @@
-package server.commands;
+package common.server.commands;
 
-import server.Channel;
-import server.ConnectionHandler;
-import server.Server;
+import common.server.Channel;
+import common.server.ConnectionHandler;
+import common.server.Server;
 
 public class RemoveChannelCommand extends Command {
     public RemoveChannelCommand(Server serverHandler, String helpInfo) {

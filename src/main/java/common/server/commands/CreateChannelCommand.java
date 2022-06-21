@@ -1,9 +1,9 @@
-package server.commands;
+package common.server.commands;
 
-import server.Channel;
-import server.ConnectionHandler;
-import server.Server;
-import server.Validator;
+import common.server.Channel;
+import common.server.ConnectionHandler;
+import common.server.Server;
+import common.server.Validator;
 
 public class CreateChannelCommand extends Command {
     public CreateChannelCommand(Server serverHandler, String helpInfo) {

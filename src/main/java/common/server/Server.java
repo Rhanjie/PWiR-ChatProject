@@ -1,16 +1,20 @@
-package server;
+package common.server;
 
+import common.RMInterface;
+import common.server.commands.*;
 import server.commands.*;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Server implements Runnable {
+public class Server extends UnicastRemoteObject implements RMInterface {
     private ServerSocket server;
     private ExecutorService threadPool;
 
@@ -18,10 +22,9 @@ public class Server implements Runnable {
     private final HashMap<String, Channel> channels;
     private final HashMap<String, ICommand> registeredCommands;
 
-    private final int port = 20000;
-    private boolean done = false;
+    public Server() throws RemoteException {
+        super();
 
-    public Server() {
         this.connections = new ArrayList<>();
         this.registeredCommands = new HashMap<>();
         this.channels = new HashMap<>();
@@ -155,7 +158,7 @@ public class Server implements Runnable {
         return null;
     }
 
-    private void shutdown() {
+    public void shutdown() {
         try {
             done = true;
 

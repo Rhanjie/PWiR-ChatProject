@@ -1,10 +1,10 @@
-package server.commands;
+package common.server.commands;
 
-import server.ConnectionHandler;
-import server.Server;
+import common.server.ConnectionHandler;
+import common.server.Server;
 
-public class LeaveCommand extends Command {
-    public LeaveCommand(Server serverHandler, String helpInfo) {
+public class UserListCommand extends Command {
+    public UserListCommand(Server serverHandler, String helpInfo) {
         super(serverHandler, helpInfo);
     }
 
@@ -14,7 +14,7 @@ public class LeaveCommand extends Command {
         if (channel == null) {
             return "You are not in channel!";
         }
-        
-        return channel.attemptToLeave(client, serverHandler);
+
+        return channel.printUserList();
     }
 }

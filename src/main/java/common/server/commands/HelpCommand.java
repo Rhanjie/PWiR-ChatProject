@@ -1,7 +1,7 @@
-package server.commands;
+package common.server.commands;
 
-import server.ConnectionHandler;
-import server.Server;
+import common.server.ConnectionHandler;
+import common.server.Server;
 
 public class HelpCommand extends Command {
     public HelpCommand(Server serverHandler, String helpInfo) {

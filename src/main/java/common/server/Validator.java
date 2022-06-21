@@ -1,4 +1,4 @@
-package server;
+package common.server;
 
 public class Validator {
     public static String validateNickname(String nickname, Server serverHandler) {

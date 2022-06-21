@@ -1,7 +1,7 @@
-package server.commands;
+package common.server.commands;
 
-import server.ConnectionHandler;
-import server.Server;
+import common.server.ConnectionHandler;
+import common.server.Server;
 
 public class QuitCommand extends Command {
     public QuitCommand(Server serverHandler, String helpInfo) {

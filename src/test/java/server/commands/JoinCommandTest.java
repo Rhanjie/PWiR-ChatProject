@@ -1,10 +1,11 @@
 package server.commands;
 
+import common.server.commands.JoinCommand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import server.Channel;
-import server.ConnectionHandler;
-import server.Server;
+import common.server.Channel;
+import common.server.ConnectionHandler;
+import common.server.Server;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
