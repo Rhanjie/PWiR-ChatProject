@@ -50,13 +50,6 @@ public class Server extends UnicastRemoteObject implements RMIInterface {
 
     @Override
     public String sendRequest(String nickname, String message) throws IOException {
-        //TODO: ONLY DEBUG PURPOSES
-        try{
-            System.out.println(getClientHost());
-        }
-
-        catch(Exception ignored){}
-
         var connection = getConnectionFromNickname(nickname);
         if (connection == null) {
             return "You are not logged on to the server";

@@ -21,7 +21,7 @@ public class Client {
     String nickname = "";
     String response;
 
-    Client(String IP) throws RemoteException, MalformedURLException, NotBoundException {
+    Client() throws RemoteException, MalformedURLException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry(20000);
         rmiService = (RMIInterface) registry.lookup("ChatServer");
 
@@ -32,6 +32,8 @@ public class Client {
 
             response = rmiService.init(nickname);
         } while (!response.contains("Successfully joined to the server!"));
+
+        System.out.println(response);
 
         InputStreamReader inputStreamReader = new InputStreamReader(System.in);
         reader = new NonBlockingBufferedReader(new BufferedReader(inputStreamReader));
@@ -58,23 +60,4 @@ public class Client {
             }
         }
     }
-
-    /*public void run() {
-        try {
-            InputHandler handler = new InputHandler(this);
-            Thread thread = new Thread(handler);
-            thread.start();
-
-            String message;
-            while ((message = input.readLine()) != null) {
-                System.out.println(message);
-            }
-        }
-
-        catch (IOException exception) {
-            System.out.println("Cannot connect to the server!");
-
-            shutdown();
-        }
-    }*/
 }

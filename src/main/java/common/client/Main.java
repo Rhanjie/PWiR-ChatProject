@@ -9,12 +9,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         try {
-            //System.out.println("Enter server IP:");
-
-            //Scanner scanner = new Scanner(System.in);
-            //String IP = scanner.next();
-
-            Client client = new Client("");
+            Client client = new Client();
             client.serve();
         }
 
