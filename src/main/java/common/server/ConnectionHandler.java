@@ -10,12 +10,16 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class ConnectionHandler {
     private final Server server;
 
     private Channel channel;
     private String nickname;
+
+    private PriorityQueue<String> messages = new PriorityQueue<>();
 
     public ConnectionHandler(Server server) {
         this.server = server;
@@ -40,12 +44,6 @@ public class ConnectionHandler {
     }
 
     public String sendRequest(String message) throws IOException {
-        try{
-            System.out.println(getClientHost()); // display message
-        }
-
-        catch(Exception ignored){}
-
         boolean isCommand = message.startsWith("/");
 
         if (isCommand) {
@@ -61,8 +59,6 @@ public class ConnectionHandler {
 
             String output = command.execute(this, args);
             if (!output.isEmpty()) {
-                sendMessage(output);
-
                 return output;
             }
 
@@ -74,6 +70,14 @@ public class ConnectionHandler {
         }
 
         return "Message sent!";
+    }
+
+    public void sendMessage(String message) {
+        messages.add(message);
+    }
+
+    public String getLastMessage() {
+        return messages.poll();
     }
 
     public void shutdown() {
