@@ -1,2 +1,2 @@
-# Projekt #1 [Simple Chat with unit tests] - PWiR & IO
+# Simple Chat using RMI with unit tests - [PWiR]
 Student: Marcin Dyla
