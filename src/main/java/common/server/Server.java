@@ -75,7 +75,9 @@ public class Server extends UnicastRemoteObject implements RMIInterface {
             return;
         }
 
-        connection.shutdown();
+        broadcastExceptSender(connection, connection.getNickname() + " left the server!");
+
+        connection.shutdown(this);
     }
 
 
@@ -185,7 +187,8 @@ public class Server extends UnicastRemoteObject implements RMIInterface {
 
     private void registerCommands() {
         registeredCommands.put("help", new HelpCommand(this, "Display list of commands"));
-        registeredCommands.put("quit", new QuitCommand(this, "Quit the server"));
+        registeredCommands.put("channels", new ChannelListCommand(this, "Display the all current available channels"));
+        registeredCommands.put("users", new UserListCommand(this, "Display the users in the current room you are in"));
 
         registeredCommands.put("create_channel", new CreateChannelCommand(this, "Create new channel with given name and optionally password"));
         registeredCommands.put("remove_channel", new RemoveChannelCommand(this, "Remove channel with given name (owner command)"));
@@ -193,8 +196,5 @@ public class Server extends UnicastRemoteObject implements RMIInterface {
         registeredCommands.put("join", new JoinCommand(this, "Join to the channel with given name"));
         registeredCommands.put("leave", new LeaveCommand(this, "Leave the channel and back to the waiting room"));
         registeredCommands.put("kick", new KickCommand(this, "Kick the user from the channel (owner command)"));
-
-        registeredCommands.put("channels", new ChannelListCommand(this, "Display the all current available channels"));
-        registeredCommands.put("users", new UserListCommand(this, "Display the users in the current room you are in"));
     }
 }

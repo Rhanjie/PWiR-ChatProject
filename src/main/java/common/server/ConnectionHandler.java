@@ -72,8 +72,10 @@ public class ConnectionHandler {
         return messages.poll();
     }
 
-    public void shutdown() {
-        //TODO
+    public void shutdown(Server serverHandler) {
+        if (channel != null) {
+            channel.attemptToLeave(this, serverHandler);
+        }
     }
 
     public String getNickname() {

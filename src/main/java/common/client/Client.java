@@ -22,6 +22,8 @@ public class Client {
     String nickname = "";
     String response = "";
 
+    boolean isWorking = true;
+
     Client() throws RemoteException, MalformedURLException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry(20000);
         rmiService = (RMIInterface) registry.lookup("ChatServer");
@@ -45,20 +47,23 @@ public class Client {
     }
 
     public void serve() throws Exception {
-        while (true) {
+        while (isWorking) {
             response = rmiService.getLastMessage(nickname);
             if (response != null) {
                 System.out.println(response);
 
                 if (response.equals("You are not logged on to the server!")) {
-                    rmiService.shutdown(nickname);
+                    quitApplication();
+
+                    return;
                 }
             }
 
             var message = reader.readLine();
             if (message != null) {
-                if (message.equalsIgnoreCase("quit")) {
+                if (message.equalsIgnoreCase("/quit")) {
                     rmiService.shutdown(nickname);
+                    quitApplication();
 
                     return;
                 }
@@ -69,5 +74,11 @@ public class Client {
                 }
             }
         }
+    }
+
+    private void quitApplication() throws RemoteException {
+        reader.close();
+
+        isWorking = false;
     }
 }
