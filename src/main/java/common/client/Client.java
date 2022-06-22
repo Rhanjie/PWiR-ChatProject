@@ -20,13 +20,17 @@ public class Client {
 
     NonBlockingBufferedReader reader;
     String nickname = "";
-    String response;
+    String response = "";
 
     Client() throws RemoteException, MalformedURLException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry(20000);
         rmiService = (RMIInterface) registry.lookup("ChatServer");
 
         do {
+            if (!response.isEmpty()) {
+                System.out.println(response);
+            }
+
             System.out.println("Give a nickname: ");
             Scanner scanner = new Scanner(System.in);
             nickname = scanner.nextLine();

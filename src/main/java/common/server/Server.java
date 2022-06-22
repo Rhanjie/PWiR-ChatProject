@@ -115,8 +115,6 @@ public class Server extends UnicastRemoteObject implements RMIInterface {
         return false;
     }
 
-
-
     public boolean registerChannel(Channel newChannel) {
         if (channels.containsKey(newChannel.getChannelName())) {
             return false;

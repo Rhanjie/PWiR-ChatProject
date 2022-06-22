@@ -18,8 +18,8 @@ public class ConnectionHandler {
     }
 
     public String init(String givenNickname) throws IOException {
-        String message = Validator.validateNickname(nickname, server);
-        boolean isNicknameValid = !message.isEmpty();
+        String message = Validator.validateNickname(givenNickname, server);
+        boolean isNicknameValid = message.isEmpty();
 
         if (!isNicknameValid) {
             return message;
